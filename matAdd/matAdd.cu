@@ -80,8 +80,8 @@ int main(int argc, char* argv[]) {
    Fill_matrix(h_A, m, n);
    Fill_matrix(h_B, m, n);
    
-   char * Amsg="A =";
-   char * Bmsg="B =";
+   const char Amsg="A =";
+   const char Bmsg="B =";
    Print_matrix(Amsg, h_A, 4, 5);
    Print_matrix(Bmsg, h_B, 4, 5);
 
