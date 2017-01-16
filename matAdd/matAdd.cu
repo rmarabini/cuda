@@ -50,7 +50,7 @@ void Fill_matrix(float A[], int m, int n) {
  */
 void Print_matrix(char title[], float A[], int m, int n) {
    int i, j;
-
+   
    printf("%s\n", title);
    for (i = 0; i < m; i++) {
       for (j = 0; j < n; j++)
@@ -79,9 +79,11 @@ int main(int argc, char* argv[]) {
    
    Fill_matrix(h_A, m, n);
    Fill_matrix(h_B, m, n);
-
-   Print_matrix("A =", h_A, 4, 5);
-   Print_matrix("B =", h_B, 4, 5);
+   
+   char * Amsg="A =";
+   char * Bmsg="B =";
+   Print_matrix(Amsg, h_A, 4, 5);
+   Print_matrix(Bmsg, h_B, 4, 5);
 
    /* Allocate matrices in device memory */
    cudaMalloc(&d_A, size);
