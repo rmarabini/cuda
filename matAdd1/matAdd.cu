@@ -156,7 +156,7 @@ int main(int argc, char* argv[]) {
    cudaEventElapsedTime(&timeDifferenceOnDevice, deviceStart, deviceStop);
 
    /* Copy result from device memory to host memory */
-   checkError(cudaMemcpy(d_C, h_C, size, cudaMemcpyDeviceToHost), "Matrix C Copy from device to Host");
+   checkError(cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost), "Matrix C Copy from device to Host");
 	
    if(checkIfMatricesEqual(h_C, h_C2, matrixSize))
       printf("Kernels correct!\n");
