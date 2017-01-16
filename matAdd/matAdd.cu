@@ -48,7 +48,7 @@ void Fill_matrix(float A[], int m, int n) {
  * Purpose:   Print an m x n matrix to stdout
  * In args:   title, A, m, n
  */
-void Print_matrix(char title[], float A[], int m, int n) {
+void Print_matrix(const char title[], float A[], int m, int n) {
    int i, j;
    
    printf("%s\n", title);
@@ -80,9 +80,9 @@ int main(int argc, char* argv[]) {
    Fill_matrix(h_A, m, n);
    Fill_matrix(h_B, m, n);
    
-   char Amsg[]="A =";
+ //  char Amsg[]="A =";
    char Bmsg[]="B =";
-   Print_matrix(Amsg, h_A, 4, 5);
+   Print_matrix("A =", h_A, 4, 5);
    Print_matrix(Bmsg, h_B, 4, 5);
 
    /* Allocate matrices in device memory */
