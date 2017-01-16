@@ -144,7 +144,7 @@ int main(int argc, char* argv[]) {
    /* Invoke kernel using m thread blocks, each of    */
    /* which contains n threads                        */
    dim3 block(threadsPerBlock,threadsPerBlock);
-   dim3 grid( (n + threadsPerBlock - 1/blocks.x), (m + blocks.y - 1/blocks.y));
+   dim3 grid( (n + threadsPerBlock - 1/block.x), (m + block.y - 1/blocks.y));
 
    cudaEventRecord(deviceStart, 0);
    Mat_add<<<block, grid>>>(d_A, d_B, d_C, m, n);
