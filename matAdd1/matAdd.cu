@@ -20,7 +20,7 @@ __global__ void Mat_add(float A[], float B[], float C[], int m, int n) {
     int threadCol = blockIdx.x * blockDim.x + threadIdx.x;
     int threadRow = blockIdx.y * blockDim.y + threadIdx.y;
 
-    int indexOfMatrix = threadCol + threadRow * matSize;
+    int indexOfMatrix = threadCol + threadRow * m;
 
     if(threadCol < m && threadRow < n)
         C[indexOfMatrix] = A[indexOfMatrix] + B[indexOfMatrix];
