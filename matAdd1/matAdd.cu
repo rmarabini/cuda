@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
    size_t n = 1000;
 
    // variables for threads per block, number of blocks.
-   int threadsPerBlock = 0, blocksInGrid = 0;
+   int threadsPerBlock = 16;//, blocksInGrid = 0;
 
    //create cuda event variables
    cudaEvent_t hostStart, hostStop, deviceStart, deviceStop;
@@ -101,11 +101,12 @@ int main(int argc, char* argv[]) {
 
    float *h_A, *h_B, *h_C;//PC
    float *d_A, *d_B, *d_C;//GPU
-   size_t size;
+   size_t size, matrixSize;
 
    /* Get size of matrices */
    printf("m = %d, n = %d\n", m, n);
-   size = m*n*sizeof(float);
+   matrixSize = m*n;
+   size = matrixSize*sizeof(float);
 
    h_A = (float*) malloc(size);
    h_B = (float*) malloc(size);
@@ -137,15 +138,31 @@ int main(int argc, char* argv[]) {
    cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
    cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
 
+   //create a proper grid block using dim3
+
    /* Invoke kernel using m thread blocks, each of    */
    /* which contains n threads                        */
-   Mat_add<<<m, n>>>(d_A, d_B, d_C, m, n);
+   dim3 block(threadsPerBlock,threadsPerBlock);
+   dim3 grid( (n + threadsPerBlock - 1/blocks.x), (m + blocks.y - 1/blocks.y));
+
+   cudaEventRecord(deviceStart, 0);
+   Mat_add<<<block, grid>>>(d_A, d_B, d_C, m, n);
+   cudaEventRecord(deviceStop, 0);
 
    /* Wait for the kernel to complete */
    cudaThreadSynchronize();
+   cudaEventElapsedTime(&timeDifferenceOnDevice, deviceStart, deviceStop);
 
    /* Copy result from device memory to host memory */
-   cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost);
+   checkError(cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost), "Matrix C Copy from device to Host");
+	
+   if(checkIfMatricesEqual(matC, matCFromGPU, matrixSize))
+      printf("Kernels correct!\n");
+   else
+      printf("Kernel logic wrong!\n");
+	
+   printf("Finished addition on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
+   printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
 
    Print_matrix("The sum is: ", h_C, 4, 5);
 
