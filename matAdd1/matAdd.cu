@@ -119,7 +119,7 @@ int main(int argc, char* argv[]) {
 
    printf("Adding matrices on CPU...\n");
    cudaEventRecord(hostStart, 0);
-   for(i = 0 ; i < size; i ++)
+   for(int i = 0 ; i < size; i ++)
            h_C[i] = h_A[i] + h_B[i];
    cudaEventRecord(hostStop, 0);
    cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
