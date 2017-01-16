@@ -119,8 +119,8 @@ int main(int argc, char* argv[]) {
 
    printf("Adding matrices on CPU...\n");
    cudaEventRecord(hostStart, 0);
-   for(i = 0 ; i < matrixSize * matrixSize; i ++)
-           matC[i] = matA[i] + matB[i];
+   for(i = 0 ; i < size; i ++)
+           h_C[i] = h_A[i] + h_B[i];
    cudaEventRecord(hostStop, 0);
    cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
    printf("Matrix addition over. Time taken on CPU: %5.5f\n",     
