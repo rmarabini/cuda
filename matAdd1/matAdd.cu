@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
    cudaEventCreate(&deviceStart);
    cudaEventCreate(&deviceStop);
 
-   float *h_A, *h_B, *h_C;//PC
+   float *h_A, *h_B, *h_C, *h_C2;//PC
    float *d_A, *d_B, *d_C;//GPU
    size_t size, matrixSize;
 
@@ -111,6 +111,7 @@ int main(int argc, char* argv[]) {
    h_A = (float*) malloc(size);
    h_B = (float*) malloc(size);
    h_C = (float*) malloc(size);
+   h_C2 = (float*) malloc(size);
    
    Fill_matrix(h_A, m, n);
    Fill_matrix(h_B, m, n);
@@ -121,7 +122,7 @@ int main(int argc, char* argv[]) {
    printf("Adding matrices on CPU...\n");
    cudaEventRecord(hostStart, 0);
    for(int i = 0 ; i < m*n; i++)
-           h_C[i] = h_A[i] + h_B[i];
+           h_C2[i] = h_A[i] + h_B[i];
 
    cudaEventRecord(hostStop, 0);
    cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
@@ -154,9 +155,9 @@ int main(int argc, char* argv[]) {
    cudaEventElapsedTime(&timeDifferenceOnDevice, deviceStart, deviceStop);
 
    /* Copy result from device memory to host memory */
-   checkError(cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost), "Matrix C Copy from device to Host");
+   checkError(cudaMemcpy(h_C2, d_C, size, cudaMemcpyDeviceToHost), "Matrix C Copy from device to Host");
 	
-   if(checkIfMatricesEqual(matC, matCFromGPU, matrixSize))
+   if(checkIfMatricesEqual(h_C, h_C2, matrixSize))
       printf("Kernels correct!\n");
    else
       printf("Kernel logic wrong!\n");
