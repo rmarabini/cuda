@@ -123,7 +123,7 @@ int main(int argc, char* argv[]) {
    cudaEventRecord(hostStart, 0);
    for(int i = 0 ; i < m*n; i++)
            h_C2[i] = h_A[i] + h_B[i];
-
+   Print_matrix("CPU =", h_C2, 4, 5);
    cudaEventRecord(hostStop, 0);
    cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
    printf("Matrix addition over. Time taken on CPU: %5.5f\n",     
