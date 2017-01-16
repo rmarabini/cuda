@@ -17,14 +17,13 @@
  * Out arg:  C
  */
 __global__ void Mat_add(float A[], float B[], float C[], int m, int n) {
-   /* blockDim.x = threads_per_block                            */
-   /* First block gets first threads_per_block components.      */
-   /* Second block gets next threads_per_block components, etc. */
-   int my_ij = blockDim.x * blockIdx.x + threadIdx.x;
+    int threadCol = blockIdx.x * blockDim.x + threadIdx.x;
+    int threadRow = blockIdx.y * blockDim.y + threadIdx.y;
 
-   /* The test shouldn't be necessary */
-   if (blockIdx.x < m && threadIdx.x < n) 
-      C[my_ij] = A[my_ij] + B[my_ij];
+    int indexOfMatrix = threadCol + threadRow * matSize;
+
+    if(threadCol < m && threadRow < n)
+        C[indexOfMatrix] = A[indexOfMatrix] + B[indexOfMatrix];
 }  /* Mat_add */
 
 
