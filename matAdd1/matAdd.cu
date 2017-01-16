@@ -156,7 +156,7 @@ int main(int argc, char* argv[]) {
    cudaEventElapsedTime(&timeDifferenceOnDevice, deviceStart, deviceStop);
 
    /* Copy result from device memory to host memory */
-   checkError(cudaMemcpy(h_C2, d_C, size, cudaMemcpyDeviceToHost), "Matrix C Copy from device to Host");
+   checkError(cudaMemcpy(d_C, h_C, size, cudaMemcpyDeviceToHost), "Matrix C Copy from device to Host");
 	
    if(checkIfMatricesEqual(h_C, h_C2, matrixSize))
       printf("Kernels correct!\n");
@@ -166,8 +166,8 @@ int main(int argc, char* argv[]) {
    printf("Finished addition on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
    printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
 
-   Print_matrix("The sum (GPU) is: ", h_C2, 4, 5);
-   Print_matrix("The sum (CPU) is: ", h_C, 4, 5);
+   Print_matrix("The sum (CPU) is: ", h_C2, 4, 5);
+   Print_matrix("The sum (GPU) is: ", h_C, 4, 5);
 
    /* Free device memory */
    cudaFree(d_A);
