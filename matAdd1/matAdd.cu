@@ -121,7 +121,7 @@ int main(int argc, char* argv[]) {
    cudaEventRecord(hostStart, 0);
    for(int i = 0 ; i < size; i++)
            {
-           fprint("i=%d",i)
+           fprint("i=%d",i);
            h_C[i] = h_A[i] + h_B[i];
            }
    cudaEventRecord(hostStop, 0);
