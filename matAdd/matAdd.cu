@@ -1,12 +1,6 @@
 /* File:     mat_add.cu
  * Purpose:  Implement matrix addition on a gpu using cuda
  *
- * Compile:  nvcc [-g] [-G] -arch=sm_21 -o mat_add mat_add.cu 
- * Run:      ./mat_add <m> <n>
- *              m is the number of rows
- *              n is the number of columns
- *
- * Input:    The matrices A and B
  * Output:   Result of matrix addition.  
  *
  * Notes:
@@ -76,10 +70,6 @@ int main(int argc, char* argv[]) {
    size_t size;
 
    /* Get size of matrices */
-   if (argc != 3) {
-      fprintf(stderr, "usage: %s <row count> <col count>\n", argv[0]);
-      exit(0);
-   }
    printf("m = %d, n = %d\n", m, n);
    size = m*n*sizeof(float);
 
