@@ -59,7 +59,7 @@ void Print_matrix(const char title[], float A[], int m, int n) {
    }  
 }  /* Print_matrix */
 
-void checkError(cudaError_t error, char * function)
+void checkError(cudaError_t error, const char function[])
 {
 
         if(error != cudaSuccess)
