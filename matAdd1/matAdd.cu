@@ -166,7 +166,7 @@ int main(int argc, char* argv[]) {
    printf("Finished addition on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
    printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
 
-   Print_matrix("The sum is: ", h_C, 4, 5);
+   Print_matrix("The sum is: ", h_C2, 4, 5);
 
    /* Free device memory */
    cudaFree(d_A);
