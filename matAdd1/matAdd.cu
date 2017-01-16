@@ -59,11 +59,45 @@ void Print_matrix(const char title[], float A[], int m, int n) {
    }  
 }  /* Print_matrix */
 
+void checkError(cudaError_t error, char * function)
+{
+
+        if(error != cudaSuccess)
+        {
+                printf("\"%s\" has a problem with error code %d and desc: %s\n", function, error, cudaGetErrorString(error));
+                exit(-1);
+        }
+}
+
+bool checkIfMatricesEqual(float * mat1, float * mat2, float matSize)
+{
+    int i = 0;
+    for( ; i < matSize; i++)
+       if(mat1[i] != mat2[i]){
+           printf("values different for i: %d\n", i);
+		   printf("mat1[i] = %d, mat2[i] = %d\n", mat1[i], mat2[i]);		   
+		   return false;
+	   }
+
+    return true;
+}
 
 /* Host code */
 int main(int argc, char* argv[]) {
-   size_t m = 1000;
+   size_t m = 1000;//mat size
    size_t n = 1000;
+
+   // variables for threads per block, number of blocks.
+   int threadsPerBlock = 0, blocksInGrid = 0;
+
+   //create cuda event variables
+   cudaEvent_t hostStart, hostStop, deviceStart, deviceStop;
+   float timeDifferenceOnHost, timeDifferenceOnDevice;
+   //initialize cuda timing variables
+   cudaEventCreate(&hostStart);
+   cudaEventCreate(&hostStop);
+   cudaEventCreate(&deviceStart);
+   cudaEventCreate(&deviceStop);
 
    float *h_A, *h_B, *h_C;//PC
    float *d_A, *d_B, *d_C;//GPU
@@ -82,6 +116,16 @@ int main(int argc, char* argv[]) {
 
    Print_matrix("A =", h_A, 4, 5);
    Print_matrix("B =", h_B, 4, 5);
+
+   printf("Adding matrices on CPU...\n");
+   cudaEventRecord(hostStart, 0);
+   for(i = 0 ; i < matrixSize * matrixSize; i ++)
+           matC[i] = matA[i] + matB[i];
+   cudaEventRecord(hostStop, 0);
+   cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
+   printf("Matrix addition over. Time taken on CPU: %5.5f\n",     
+          timeDifferenceOnHost);
+
 
    /* Allocate matrices in device memory */
    cudaMalloc(&d_A, size);
