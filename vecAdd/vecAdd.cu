@@ -61,6 +61,8 @@ main(void)
     }
 
     // Allocate the device vectors A, B and C
+    cudaEvent_t startMem, stopMem; 
+
     cudaEventCreate(&startMem);
     cudaEventCreate(&stopMem);
     cudaEventRecord(startMem, 0) ;
