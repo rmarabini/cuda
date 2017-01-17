@@ -153,7 +153,7 @@ int main(int argc, char* argv[]) {
    /* Invoke kernel using m thread blocks, each of    */
    /* which contains n threads                        */
 
-   dim3 block(threadsPerBlock,1);
+   dim3 block(threadsPerBlock);
    dim3 grid( numVec, (dimVec+threadsPerBlock-1)/threadsPerBlock );
    cudaEventRecord(deviceStart, 0);
    //d_A -> inMatrix, d_B vRef, d_C outMat
@@ -175,7 +175,7 @@ int main(int argc, char* argv[]) {
    cudaEventElapsedTime(&timeDifferenceOnDevice, deviceStart, deviceStop);
 
    /* Copy result from device memory to host memory */
-   checkError(cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost), "Matrix C Copy from device to Host");
+   //checkError(cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost), "Matrix C Copy from device to Host");
 	
    if(checkIfMatricesEqual(h_C, h_C2, matrixSize))
       printf("Kernels correct!\n");
