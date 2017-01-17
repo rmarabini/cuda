@@ -25,7 +25,7 @@ __global__ void rotMatFunc(float matIn[],
                            float matOut[], 
                            int numVec, 
                            int vecDim, 
-                           float rotMat[][]) {
+                           float rotMat[2][2]) {
     int threadCol = blockIdx.y * blockDim.x + threadIdx.x;
     int threadRow = blockIdx.x ;
     int indexOfMatrix = threadCol + threadRow * vecDim;
