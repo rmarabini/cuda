@@ -124,6 +124,7 @@ int main(int argc, char* argv[]) {
    for(int i = 0 ; i < numVec; i++)
        for(int j = 0 ; j < dimVec; j++)
            h_C2[i*dimVec+j] = h_A[i*dimVec+j] + h_B[j];
+   Print_matrix("C(CPU) =", h_C2, 4, 5);
 
    cudaEventRecord(hostStop, 0);
    cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
