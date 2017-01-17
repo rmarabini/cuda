@@ -130,10 +130,13 @@ int main(int argc, char* argv[]) {
    //init rot Matrix
    float rotMat[2][2];
  
-   rotMat[0][0] = 0.f;
+   /*rotMat[0][0] = 0.f;
    rotMat[0][1] = -1.f;
-   rotMat[1][0] = +1.f;
-   rotMat[1][1] = 0.f;
+   */
+   rotMat[0][0] = 0.936f;
+   rotMat[0][1] = 0.352f;
+   rotMat[1][0] = -rotMat[0][1]
+   rotMat[1][1] =  rotMat[0][0];
 
    Print_matrix("A =", h_A, dimX, dimY, 9, 9);
    printf("rotMat=\n%.3f %.3f \n %.3f %.3f\n\n",rotMat[0][0],rotMat[0][1],rotMat[1][0],rotMat[1][1]);
