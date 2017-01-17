@@ -161,16 +161,13 @@ int main(int argc, char* argv[]) {
 
    //create a proper grid block using dim3
 
-   /* Invoke kernel using m thread blocks, each of    */
-   /* which contains n threads                        */
+   /* Invoke kernel using dimX * dimY thread blocks, each of    */
+   /* which contains threadsPerBlock threads                        */
 
    dim3 block(threadsPerBlock);
    dim3 grid( dimX, (dimY+threadsPerBlock-1)/threadsPerBlock );
    cudaEventRecord(deviceStart, 0);
-   //d_A -> inMatrix, d_B vRef, d_C outMat
-//block=1024, grid.x=10, grid.y=1024
    rotMat<<<grid, block>>>(d_A, d_B, dimX, dimY, rotMat);
-//error=invalid configuration argumentvalues different for i: 0
 
    cudaError_t code=cudaGetLastError();
    if (code)
