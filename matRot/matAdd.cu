@@ -94,8 +94,8 @@ bool checkIfMatricesEqual(float * mat1, float * mat2, float matSize)
 
 /* Host code */
 int main(int argc, char* argv[]) {
-   size_t dimX = 10;//mat size
-   size_t dimY = 10;
+   size_t dimX = 9;//mat size
+   size_t dimY = 9;
    float fX0=dimX/2., fY0=dimY/2.;
    int  iX0=dimX/2, iY0=dimY/2;
 
@@ -133,7 +133,7 @@ int main(int argc, char* argv[]) {
    rotMat[1][0] = +1.f;
    rotMat[1][1] = 0.f;
 
-   Print_matrix("A =", h_A, dimX, dimY, 10, 10);
+   Print_matrix("A =", h_A, dimX, dimY, 9, 9);
    printf("rotMat=\n%.3f %.3f \n %.3f %.3f\n\n",rotMat[0][0],rotMat[0][1],rotMat[1][0],rotMat[1][1]);
    printf("Rotating matrices on CPU...\n");
    cudaEventRecord(hostStart, 0);
@@ -155,7 +155,7 @@ int main(int argc, char* argv[]) {
    cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
    printf("Matrix addition over. Time taken on CPU: %5.5f\n",     
           timeDifferenceOnHost);
-   Print_matrix("B2(CPU) =", h_B2, dimX, dimY, 10, 10);
+   Print_matrix("B2(CPU) =", h_B2, dimX, dimY, 9, 9);
 
    /* Allocate matrices in device memory */
    cudaMalloc(&d_A, size);
@@ -197,8 +197,8 @@ int main(int argc, char* argv[]) {
    printf("Finished addition on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
    printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
 
-   Print_matrix("The sum (CPU) is: ", h_B2, dimX, dimY, 4, 5);
-   Print_matrix("The sum (GPU) is: ", h_B, dimX, dimY, 4, 5);
+   Print_matrix("The rotated image(CPU) is: ", h_B2, dimX, dimY, 4, 5);
+   Print_matrix("The rotated image(GPU) is: ", h_B, dimX, dimY, 4, 5);
 
    /* Free device memory */
    cudaFree(d_A);
