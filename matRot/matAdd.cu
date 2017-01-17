@@ -9,6 +9,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+//#include "cuPrintf.cuh"
+//#include "cuPrintf.cu"
+ //#include "utils/cuPrintf.cu"
+
 
 /*---------------------------------------------------------------------
  * Kernel:   Mat_add
@@ -16,107 +20,31 @@
  * In args:  A, B, m, n
  * Out arg:  C
  */
-__global__ void Mat_add(float A[], float B[], float C[], int m, int n) {
-    int threadCol = blockIdx.x * blockDim.x + threadIdx.x;
-    int threadRow = blockIdx.y * blockDim.y + threadIdx.y;
+__global__ void rotMat(float matIn[], float vRef[], float matOut[], int numVec, int vecDim) {
+    int threadCol = blockIdx.y * blockDim.x + threadIdx.x;
+    int threadRow = blockIdx.x ;
+    int indexOfMatrix = threadCol + threadRow * vecDim;
 
-    int indexOfMatrix = threadCol + threadRow * m;
-
-    if(threadCol < m && threadRow < n)
-        C[indexOfMatrix] = A[indexOfMatrix] + B[indexOfMatrix];
+    if(threadCol < vecDim )
+        matOut[indexOfMatrix] = matIn[indexOfMatrix] + vRef[threadCol];
 }  /* Mat_add */
 
-void rotateImage_Kernel(cufftComplex* trg, 
-                        const cufftComplex* src, 
-                        const unsigned int imageWidth,
-                        const unsigned int imageHeight, 
-                        const float angle, 
-                        const float scale)
-{
-    // compute thread dimension
-    const unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
-    const unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
 
-    //// compute target address
-    const unsigned int idx = x + y * imageWidth;
-
-    const int xA = (x - imageWidth/2 );
-    const int yA = (y - imageHeight/2 );
-
-    const int xR = (int)floor(1.0f/scale * (xA * cos(angle) - yA * sin(angle)));
-    const int yR = (int)floor(1.0f/scale * (xA * sin(angle) + yA * cos(angle)));
-
-    float src_x = xR + imageWidth/2;
-    float src_y = yR + imageHeight/2;
-
-
-
-     if ( src_x >= 0.0f && src_x < imageWidth && src_y >= 0.0f && src_y < imageHeight) {
-        // BI - LINEAR INTERPOLATION
-        float src_x0 = (float)(int)(src_x);
-        float src_x1 = (src_x0+1);
-        float src_y0 = (float)(int)(src_y);
-        float src_y1 = (src_y0+1);
-
-        float sx = (src_x-src_x0);
-        float sy = (src_y-src_y0);
-
-
-        int idx_src00 = min(max(0.0f,src_x0   + src_y0 * imageWidth),imageWidth*imageHeight-1.0f);
-        int idx_src10 = min(max(0.0f,src_x1   + src_y0 * imageWidth),imageWidth*imageHeight-1.0f);
-        int idx_src01 = min(max(0.0f,src_x0   + src_y1 * imageWidth),imageWidth*imageHeight-1.0f);
-        int idx_src11 = min(max(0.0f,src_x1   + src_y1 * imageWidth),imageWidth*imageHeight-1.0f);
-
-        trg[idx].y = 0.0f;
-
-        trg[idx].x  = (1.0f-sx)*(1.0f-sy)*src[idx_src00].x;
-        trg[idx].x += (     sx)*(1.0f-sy)*src[idx_src10].x;
-        trg[idx].x += (1.0f-sx)*(     sy)*src[idx_src01].x;
-        trg[idx].x += (     sx)*(     sy)*src[idx_src11].x;
-    } else {
-        trg[idx].x = 0.0f;
-        trg[idx].y = 0.0f;
-     }
-
-    DEVICE_METHODE_LAST_COMMAND;
-
-}
-
-
-void translateImage_Kernel(cufftComplex* trg, const cufftComplex* src, const unsigned int imageWidth, const unsigned int imageHeight, const float tX, const float tY)
-{
-    // compute thread dimension
-    const unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
-    const unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
-
-    //// compute target address
-    const unsigned int idx = x + y * imageWidth;
-
-    const int xB = ((int)x + (int)tX );
-    const int yB = ((int)y + (int)tY );
-
-    if ( xB >= 0 && xB < imageWidth && yB >= 0 && yB < imageHeight) {
-        trg[idx] = src[xB + yB * imageWidth];
-    } else {
-        trg[idx].x = 0.0f;
-        trg[idx].y = 0.0f;
-    }
-
-    DEVICE_METHODE_LAST_COMMAND;
-
-}
 /*---------------------------------------------------------------------
  * Function:  Fill_matrix
  * Purpose:   Fill an m x n matrix with random values
  * In args:   m, n
  * Out arg:   A
  */
-void Fill_matrix(float A[], int m, int n) {
+void Fill_matrix(float A[], int dimX, int dimY) {
    int i, j;
-
-   for (i = 0; i < m; i++)
-      for (j = 0; j < n; j++)
-         A[i*n+j]=rand()/(float)RAND_MAX;
+//numVec, dimVec
+   for (i = 0; i < dimX; i++)
+      for (j = 0; j < dimY; j++)
+          if(i==j )//or (i+j)==(dimX+1))
+            A[i*dimY+j]=1.0f;
+          else
+            A[i*dimY+j]=0.0f;
 }  /* Read_matrix */
 
 
@@ -125,13 +53,13 @@ void Fill_matrix(float A[], int m, int n) {
  * Purpose:   Print an m x n matrix to stdout
  * In args:   title, A, m, n
  */
-void Print_matrix(const char title[], float A[], int m, int n) {
+void Print_matrix(const char title[], float A[], int numVec, int dimVec, int m, int n) {
    int i, j;
-   
+   //numVec, dimVec
    printf("%s\n", title);
    for (i = 0; i < m; i++) {
       for (j = 0; j < n; j++)
-         printf("%.1f ", A[i*n+j]);
+         printf("%.2f ", A[i*dimVec+j]);
       printf("\n");
    }  
 }  /* Print_matrix */
@@ -161,11 +89,13 @@ bool checkIfMatricesEqual(float * mat1, float * mat2, float matSize)
 
 /* Host code */
 int main(int argc, char* argv[]) {
-   size_t m = 1000;//mat size
-   size_t n = 1000;
+   size_t dimX = 10;//mat size
+   size_t dimY = 10;
+   float fX0=dimX/2., fY0=dimY/2.;
+   int  iX0=dimX/2, iY0=dimY/2;
 
    // variables for threads per block, number of blocks.
-   int threadsPerBlock = 16;//, blocksInGrid = 0;
+   int threadsPerBlock = 1024;//, blocksInGrid = 0;
 
    //create cuda event variables
    cudaEvent_t hostStart, hostStop, deviceStart, deviceStop;
@@ -176,56 +106,78 @@ int main(int argc, char* argv[]) {
    cudaEventCreate(&deviceStart);
    cudaEventCreate(&deviceStop);
 
-   float *h_A, *h_B, *h_C, *h_C2;//PC
-   float *d_A, *d_B, *d_C;//GPU
+   float *h_A, *h_B;//PC
+   float *d_A, *d_B;//GPU
    size_t size, matrixSize;
 
    /* Get size of matrices */
-   printf("m = %d, n = %d\n", m, n);
-   matrixSize = m*n;
+
+   matrixSize = dimX*dimY;
    size = matrixSize*sizeof(float);
 
    h_A = (float*) malloc(size);
-   h_B = (float*) malloc(size);
-   h_C = (float*) malloc(size);
-   h_C2 = (float*) malloc(size);
-   
-   Fill_matrix(h_A, m, n);
-   Fill_matrix(h_B, m, n);
+   h_B = (float*) calloc(size,1);
+   h_B2 = (float*) calloc(size,1);
+   Fill_matrix(h_A, numVec, dimVec);
 
-   Print_matrix("A =", h_A, 4, 5);
-   Print_matrix("B =", h_B, 4, 5);
+   //init rot Matrix
+   float rotMat[2][2];
+ 
+   rotMat[0][0] = 0.f;
+   rotMat[0][1] = -1.f;
+   rotMat[1][0] = +1.f;
+   rotMat[1][1] = 0.f;
 
-   printf("Adding matrices on CPU...\n");
+   Print_matrix("A =", h_A, numVec, dimVec, 10, 10);
+   printf("rotMat=\n%.3f %.3f \n %.3f %.3f\n\n",rotMat[0][0],rotMat[0][1],rotMat[1][0],rotMat[1][1]);
+   printf("Rotating matrices on CPU...\n");
    cudaEventRecord(hostStart, 0);
-   for(int i = 0 ; i < m*n; i++)
-           h_C2[i] = h_A[i] + h_B[i];
-
+   float xOut,yOut;
+   float xIn, yIn;
+   int iIn, jIn;
+   for(int i = 0 ; i < dimX; i++)
+       for(int j = 0 ; j < dimY; j++){
+           xOut = i - fX0;
+           yOut = j - fY0;
+           xIn = rotMat[0][0] * xOut + rotMat[0][1] * yOut;
+           yIn = rotMat[1][0] * xOut + rotMat[1][1] * yOut;
+           iIn = int(xIn + fX0);
+           jIn = int(yIn + fY0);
+           h_B2[i*dimY+j] = h_A[iIn*dimY+jIn];
+           //printf("i=%d, j=%d C2=%f a=%f b=%f i*dimVec+j=%d\n",i,j,h_C2[i*dimVec+j],h_A[i*dimVec+j],h_B[j],i*dimVec+j);
+            }
    cudaEventRecord(hostStop, 0);
    cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
    printf("Matrix addition over. Time taken on CPU: %5.5f\n",     
           timeDifferenceOnHost);
-
+   Print_matrix("B2(CPU) =", h_B2, dimX, dimY, 10, 10);
 
    /* Allocate matrices in device memory */
    cudaMalloc(&d_A, size);
    cudaMalloc(&d_B, size);
-   cudaMalloc(&d_C, size);
 
    /* Copy matrices from host memory to device memory */
    cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
-   cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
 
    //create a proper grid block using dim3
 
    /* Invoke kernel using m thread blocks, each of    */
    /* which contains n threads                        */
-   dim3 block(threadsPerBlock,threadsPerBlock);
-   dim3 grid( (n + threadsPerBlock - 1/block.x), 
-              (m + block.y - 1/block.y));
 
+   dim3 block(threadsPerBlock);
+   dim3 grid( numVec, (dimVec+threadsPerBlock-1)/threadsPerBlock );
    cudaEventRecord(deviceStart, 0);
-   Mat_add<<<block, grid>>>(d_A, d_B, d_C, m, n);
+   //d_A -> inMatrix, d_B vRef, d_C outMat
+//block=1024, grid.x=10, grid.y=1024
+   rotMat<<<grid, block>>>(d_A, d_B, d_C, numVec, dimVec);
+//error=invalid configuration argumentvalues different for i: 0
+
+   cudaError_t code=cudaGetLastError();
+   if (code)
+       printf("error=%s",cudaGetErrorString(code));
+   else
+       printf("code=%d",code);
+   cudaDeviceSynchronize();  
    cudaEventRecord(deviceStop, 0);
 
    /* Wait for the kernel to complete */
@@ -233,9 +185,9 @@ int main(int argc, char* argv[]) {
    cudaEventElapsedTime(&timeDifferenceOnDevice, deviceStart, deviceStop);
 
    /* Copy result from device memory to host memory */
-   checkError(cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost), "Matrix C Copy from device to Host");
+   checkError(cudaMemcpy(h_B, d_B, size, cudaMemcpyDeviceToHost), "Matrix B Copy from device to Host");
 	
-   if(checkIfMatricesEqual(h_C, h_C2, matrixSize))
+   if(checkIfMatricesEqual(h_B, h_B2, matrixSize))
       printf("Kernels correct!\n");
    else
       printf("Kernel logic wrong!\n");
@@ -243,18 +195,17 @@ int main(int argc, char* argv[]) {
    printf("Finished addition on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
    printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
 
-   Print_matrix("The sum (CPU) is: ", h_C2, 4, 5);
-   Print_matrix("The sum (GPU) is: ", h_C, 4, 5);
+   Print_matrix("The sum (CPU) is: ", h_B2, numVec, dimVec, 4, 5);
+   Print_matrix("The sum (GPU) is: ", h_B, numVec, dimVec, 4, 5);
 
    /* Free device memory */
    cudaFree(d_A);
    cudaFree(d_B);
-   cudaFree(d_C);
 
    /* Free host memory */
    free(h_A);
    free(h_B);
-   free(h_C);
+   free(h_B2);
 
    return 0;
 }  /* main */
