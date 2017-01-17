@@ -48,13 +48,13 @@ void Fill_matrix(float A[], int m, int n) {
  * Purpose:   Print an m x n matrix to stdout
  * In args:   title, A, m, n
  */
-void Print_matrix(const char title[], float A[], int m, int n) {
+void Print_matrix(const char title[], float A[], int numVec, int dimVec, int m, int n) {
    int i, j;
    //numVec, dimVec
    printf("%s\n", title);
    for (i = 0; i < m; i++) {
       for (j = 0; j < n; j++)
-         printf("%.2f ", A[i*n+j]);
+         printf("%.2f ", A[i*dimVec+j]);
       printf("\n");
    }  
 }  /* Print_matrix */
@@ -117,8 +117,8 @@ int main(int argc, char* argv[]) {
    Fill_matrix(h_A, numVec, dimVec);
    Fill_matrix(h_B, 1, dimVec);
 
-   Print_matrix("A =", h_A, 4, 5);
-   Print_matrix("B =", h_B, 1, 5);
+   Print_matrix("A =", h_A, numVec, dimVec, 4, 5);
+   Print_matrix("B =", h_B, numVec, dimVec, 1, 5);
 
    printf("Adding matrices on CPU...\n");
    cudaEventRecord(hostStart, 0);
@@ -126,7 +126,7 @@ int main(int argc, char* argv[]) {
        for(int j = 0 ; j < dimVec; j++){
            h_C2[i*dimVec+j] = h_A[i*dimVec+j] + h_B[j];
            printf("i=%d, j=%d C2=%f a=%f b=%f i*dimVec+j=%d\n",i,j,h_C2[i*dimVec+j],h_A[i*dimVec+j],h_B[j],i*dimVec+j);
-   Print_matrix("The sum (CPU) is: ", h_C2, 4, 5);
+   Print_matrix("The sum (CPU) is: ", h_C2, numVec, dimVec, 4, 5);
             }
    cudaEventRecord(hostStop, 0);
    cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
@@ -170,8 +170,8 @@ int main(int argc, char* argv[]) {
    printf("Finished addition on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
    printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
 
-   Print_matrix("The sum (CPU) is: ", h_C2, 4, 5);
-   Print_matrix("The sum (GPU) is: ", h_C, 4, 5);
+   Print_matrix("The sum (CPU) is: ", h_C2, numVec, dimVec, 4, 5);
+   Print_matrix("The sum (GPU) is: ", h_C, numVec, dimVec, 4, 5);
 
    /* Free device memory */
    cudaFree(d_A);
