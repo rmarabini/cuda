@@ -29,7 +29,7 @@ __global__ void rotMatFunc(float matIn[],
     int y = blockIdx.y * blockDim.x + threadIdx.x;
     int x = blockIdx.x ;
 printf("x=%d, y=%d, BX=%d, BY=%d, TX=%d\n",x,y,blockIdx.x,blockIdx.y,threadIdx.x );
-return;
+
     int indexOfMatrixOut = y + x * dimY;
 
     int  x0=dimX/2, y0=dimY/2;//this may be passed
