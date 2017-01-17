@@ -111,9 +111,9 @@ void rotateCPU(float matIn[],
            xIn = (int)floor(rotMat[0][0] * xOut + rotMat[0][1] * yOut);
            yIn = (int)floor(rotMat[1][0] * xOut + rotMat[1][1] * yOut);
            
-           iIn = int(xIn + X0);
-           jIn = int(yIn + Y0);
-           matOut[i*dimY+j] = matIn[iIn*dimY+jIn];
+           iIn = int(xIn + x0);
+           jIn = int(yIn + y0);
+           matOut[x*dimY+y] = matIn[iIn*dimY+jIn];
            }
 
 }
