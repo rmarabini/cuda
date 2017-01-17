@@ -125,7 +125,7 @@ int main(int argc, char* argv[]) {
    for(int i = 0 ; i < numVec; i++)
        for(int j = 0 ; j < dimVec; j++){
            h_C2[i*dimVec+j] = h_A[i*dimVec+j] + h_B[j];
-           printf("i=%d, j=%d C2=%f a=%f b=%f\n",i,j,h_C2[i*dimVec+j],h_A[i*dimVec+j],h_B[j]);
+           printf("i=%d, j=%d C2=%f a=%f b=%f i*dimVec+j=%d\n",i,j,h_C2[i*dimVec+j],h_A[i*dimVec+j],h_B[j],i*dimVec+j);
             }
    cudaEventRecord(hostStop, 0);
    cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
