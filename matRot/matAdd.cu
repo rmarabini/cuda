@@ -44,7 +44,7 @@ printf("x=%d, y=%d, indexOUT=%d\n",x,y,indexOfMatrixOut );
            
    xIn = rotMat[0] * xOut + rotMat[1] * yOut;
    yIn = rotMat[2] * xOut + rotMat[3] * yOut;
-           
+printf("x=%d, y=%d, xIn=%f, yIn=%f\n",x,y,xIn, yIn);           
    iIn = int(xIn * dimXf + x0);
    jIn = int(yIn * dimYf + y0);
    int indexOfMatrixIn = jIn + iIn * dimY;
