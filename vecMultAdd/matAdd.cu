@@ -36,7 +36,7 @@ __global__ void Mat_add_Vector(float matIn[], float vRef[], float matOut[], int 
  */
 void Fill_matrix(float A[], int m, int n) {
    int i, j;
-
+//numVec, dimVec
    for (i = 0; i < m; i++)
       for (j = 0; j < n; j++)
          A[i*n+j]=rand()/(float)RAND_MAX;
@@ -50,7 +50,7 @@ void Fill_matrix(float A[], int m, int n) {
  */
 void Print_matrix(const char title[], float A[], int m, int n) {
    int i, j;
-   
+   //numVec, dimVec
    printf("%s\n", title);
    for (i = 0; i < m; i++) {
       for (j = 0; j < n; j++)
@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
    size = matrixSize*sizeof(float);
 
    h_A = (float*) malloc(size);
-   h_B = (float*) malloc(dimVec);
+   h_B = (float*) malloc(dimVec*sizeof(float));
    h_C = (float*) malloc(size);
    h_C2 = (float*) malloc(size);
    
@@ -134,7 +134,7 @@ int main(int argc, char* argv[]) {
 
    /* Allocate matrices in device memory */
    cudaMalloc(&d_A, size);
-   cudaMalloc(&d_B, dimVec);
+   cudaMalloc(&d_B, dimVec*sizeof(float));
    cudaMalloc(&d_C, size);
 
    /* Copy matrices from host memory to device memory */
