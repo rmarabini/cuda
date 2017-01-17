@@ -153,7 +153,7 @@ int main(int argc, char* argv[]) {
    /* which contains n threads                        */
    dim3 block(threadsPerBlock);
    dim3 grid( numVec, ceil((float)dimVec/threadsPerBlock) );
-   double blocky = (double)dimVec)/threadsPerBlock
+   double blocky = (double)dimVec)/threadsPerBlock;
    printf("dimVec=%d, threadsPerBlock=%d, ceil=%d %f\n", dimVec, threadsPerBlock, ceil(blocky),((double)dimVec)/threadsPerBlock);
    printf("dimVec=%d, threadsPerBlock=%d, ceil=%d %f\n", dimVec, threadsPerBlock, ceil(blocky),((double)dimVec)/threadsPerBlock);
    printf("dimVec=%d, threadsPerBlock=%d, ceil=%d %f\n", dimVec, threadsPerBlock, ceil(blocky),((double)dimVec)/threadsPerBlock);
