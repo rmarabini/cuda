@@ -54,7 +54,7 @@ void Print_matrix(const char title[], float A[], int m, int n) {
    printf("%s\n", title);
    for (i = 0; i < m; i++) {
       for (j = 0; j < n; j++)
-         printf("%.1f ", A[i*n+j]);
+         printf("%.2f ", A[i*n+j]);
       printf("\n");
    }  
 }  /* Print_matrix */
