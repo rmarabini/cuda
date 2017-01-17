@@ -53,8 +53,11 @@ printf("x=%d, y=%d, BX=%d, BY=%d, TX=%d\n",x,y,blockIdx.x,blockIdx.y,threadIdx.x
         iIn < dimX && 
         jIn >= 0 && 
         jIn < dimY) 
+        {
+        printf("x=%d, y=%d, indexOUT=%d, indexIN=%d\n", x,y, indexOfMatrixOut, indexOfMatrixIn);
+
             matOut[indexOfMatrixOut] = matIn[indexOfMatrixIn];
-   
+         }
 }  /* Mat_add */
 
 
