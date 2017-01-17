@@ -126,7 +126,6 @@ int main(int argc, char* argv[]) {
        for(int j = 0 ; j < dimVec; j++){
            h_C2[i*dimVec+j] = h_A[i*dimVec+j] + h_B[j];
            printf("i=%d, j=%d C2=%f a=%f b=%f i*dimVec+j=%d\n",i,j,h_C2[i*dimVec+j],h_A[i*dimVec+j],h_B[j],i*dimVec+j);
-   Print_matrix("The sum (CPU) is: ", h_C2, numVec, dimVec, 4, 5);
             }
    cudaEventRecord(hostStop, 0);
    cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
