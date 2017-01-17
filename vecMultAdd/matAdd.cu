@@ -11,7 +11,7 @@
 #include <math.h>
 //#include "cuPrintf.cuh"
 //#include "cuPrintf.cu"
- #include "utils/cuPrintf.cu"
+ //#include "utils/cuPrintf.cu"
 
 /*---------------------------------------------------------------------
  * Kernel:   Mat_add
