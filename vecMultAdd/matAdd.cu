@@ -116,8 +116,8 @@ int main(int argc, char* argv[]) {
 
    h_A = (float*) malloc(size);
    h_B = (float*) malloc(vecSize);
-   h_C = (float*) calloc(size,1);
-   h_C2 = (float*) calloc(size,1);
+   h_C = (float*) malloc(size);
+   h_C2 = (float*) malloc(size);
    printf("size=%d vecSize=%d\n",size,vecSize);
    Fill_matrix(h_A, numVec, dimVec);
    Fill_matrix(h_B, 1, dimVec);
@@ -152,9 +152,9 @@ int main(int argc, char* argv[]) {
    /* Invoke kernel using m thread blocks, each of    */
    /* which contains n threads                        */
    dim3 block(threadsPerBlock);
-   dim3 grid( numVec, 1+dimVec/threadsPerBlock );
-   printf("dimVec=%d, threadsPerBlock=%d, ceil=%d\n", dimVec, threadsPerBlock, 1 + dimVec/threadsPerBlock);
-   printf("block=%d, grid.x=%d, grid.y=%d\n",threadsPerBlock,numVec, 1 + dimVec/threadsPerBlock);
+   dim3 grid( numVec, ceil((float)dimVec/threadsPerBlock) );
+   printf("dimVec=%d, threadsPerBlock=%d, ceil=%d\n", dimVec, threadsPerBlock, ceil((float)dimVec/threadsPerBlock));
+   printf("block=%d, grid.x=%d, grid.y=%d\n",threadsPerBlock,numVec, ceil((float)dimVec/threadsPerBlock));
    cudaEventRecord(deviceStart, 0);
    //d_A -> inMatrix, d_B vRef, d_C outMat
 //block=1024, grid.x=10, grid.y=1024
