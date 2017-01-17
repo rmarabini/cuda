@@ -22,12 +22,8 @@ __global__ void Mat_add_Vector(float matIn[], float vRef[], float matOut[], int 
     int threadCol = blockIdx.y * blockDim.x + threadIdx.x;
     int threadRow = blockIdx.x ;
     //if (blockIdx.y==0 && blockIdx.x==0)
-    //   printf("col=%d, row=%d",threadCol,threadRow);
-    int indexOfMatrix = threadCol + threadRow * vecDim;
-    cudaPrintfInit ();
-    hello_kernel <<< gridSize, blockSize >>> (1.2345f);
-    cudaPrintfDisplay (stdout, true);
-    cudaPrintfEnd ();
+       printf("col=%d, row=%d",threadCol,threadRow);
+
     if(threadCol < vecDim )
         {
         matOut[indexOfMatrix] = matIn[indexOfMatrix] + vRef[threadCol];
