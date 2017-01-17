@@ -91,15 +91,33 @@ bool checkIfMatricesEqual(float * mat1, float * mat2, float matSize)
 
     return true;
 }
-
-/* Host code */
-int main(int argc, char* argv[]) {
-   size_t dimX = 9;//mat size
-   size_t dimY = 9;
+void rotateCPU(float matIn[], 
+               float matOut[], dimX, dimY,
+               float rotMat[2][2])
+{
    float fX0,fY0;
    int  iX0=dimX/2, iY0=dimY/2;
    fX0 = (float)iX0;
    fY0 = (float)iY0;
+   float xOut,yOut;
+   float xIn, yIn;
+   int iIn, jIn;
+   for(int i = 0 ; i < dimX; i++)
+       for(int j = 0 ; j < dimY; j++){
+           xOut = i - fX0;
+           yOut = j - fY0;
+           xIn = rotMat[0][0] * xOut + rotMat[0][1] * yOut;
+           yIn = rotMat[1][0] * xOut + rotMat[1][1] * yOut;
+           iIn = int(xIn + fX0);
+           jIn = int(yIn + fY0);
+           matOut[i*dimY+j] = matIn[iIn*dimY+jIn];
+           }
+
+}
+/* Host code */
+int main(int argc, char* argv[]) {
+   size_t dimX = 9;//mat size
+   size_t dimY = 9;
 
    // variables for threads per block, number of blocks.
    int threadsPerBlock = 1024;//, blocksInGrid = 0;
@@ -130,11 +148,10 @@ int main(int argc, char* argv[]) {
    //init rot Matrix
    float rotMat[2][2];
  
-   /*rotMat[0][0] = 0.f;
+   rotMat[0][0] = 0.f;
    rotMat[0][1] = -1.f;
-   */
-   rotMat[0][0] = 0.936f;
-   rotMat[0][1] = 0.352f;
+   //rotMat[0][0] = 0.936f;
+   //rotMat[0][1] = 0.352f;
    rotMat[1][0] = -rotMat[0][1];
    rotMat[1][1] =  rotMat[0][0];
 
@@ -142,20 +159,10 @@ int main(int argc, char* argv[]) {
    printf("rotMat=\n%.3f %.3f \n %.3f %.3f\n\n",rotMat[0][0],rotMat[0][1],rotMat[1][0],rotMat[1][1]);
    printf("Rotating matrices on CPU...\n");
    cudaEventRecord(hostStart, 0);
-   float xOut,yOut;
-   float xIn, yIn;
-   int iIn, jIn;
-   for(int i = 0 ; i < dimX; i++)
-       for(int j = 0 ; j < dimY; j++){
-           xOut = i - fX0;
-           yOut = j - fY0;
-           xIn = rotMat[0][0] * xOut + rotMat[0][1] * yOut;
-           yIn = rotMat[1][0] * xOut + rotMat[1][1] * yOut;
-           iIn = int(xIn + fX0);
-           jIn = int(yIn + fY0);
-           h_B2[i*dimY+j] = h_A[iIn*dimY+jIn];
-           //printf("i=%d, j=%d C2=%f a=%f b=%f i*dimVec+j=%d\n",i,j,h_C2[i*dimVec+j],h_A[i*dimVec+j],h_B[j],i*dimVec+j);
-            }
+   //////////
+   void rotateCPU(h_A,h_B2, dimX, dimY, rotMat[2][2]);
+
+   //////////
    cudaEventRecord(hostStop, 0);
    cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
    printf("Matrix addition over. Time taken on CPU: %5.5f\n",     
