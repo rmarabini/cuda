@@ -117,8 +117,8 @@ int main(int argc, char* argv[]) {
 
    h_A = (float*) malloc(size);
    h_B = (float*) malloc(vecSize);
-   h_C = (float*) malloc(size);
-   h_C2 = (float*) malloc(size);
+   h_C = (float*) calloc(size,1);
+   h_C2 = (float*) calloc(size,1);
    printf("size=%d vecSize=%d\n",size,vecSize);
    Fill_matrix(h_A, numVec, dimVec);
    Fill_matrix(h_B, 1, dimVec);
