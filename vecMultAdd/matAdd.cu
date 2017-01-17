@@ -9,8 +9,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "cuPrintf.cuh"
-#include "cuPrintf.cu"
+//#include "cuPrintf.cuh"
+//#include "cuPrintf.cu"
 
 /*---------------------------------------------------------------------
  * Kernel:   Mat_add
