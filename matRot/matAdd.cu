@@ -135,7 +135,7 @@ int main(int argc, char* argv[]) {
    */
    rotMat[0][0] = 0.936f;
    rotMat[0][1] = 0.352f;
-   rotMat[1][0] = -rotMat[0][1]
+   rotMat[1][0] = -rotMat[0][1];
    rotMat[1][1] =  rotMat[0][0];
 
    Print_matrix("A =", h_A, dimX, dimY, 9, 9);
