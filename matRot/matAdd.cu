@@ -48,14 +48,13 @@ printf("x=%d, y=%d, indexOUT=%d\n",x,y,indexOfMatrixOut );
    iIn = int(xIn * dimXf + x0);
    jIn = int(yIn * dimYf + y0);
    int indexOfMatrixIn = jIn + iIn * dimY;
-
+printf("x=%d, y=%d, iIn=%f, jIn=%f, indexOUT=%d\n",x,y,iIn, jIn, indexOfMatrixOut );
    if ( iIn >= 0 && 
         iIn < dimX && 
         jIn >= 0 && 
         jIn < dimY) 
         {
-        printf("x=%d, y=%d, indexOUT=%d, indexIN=%d\n", x,y, indexOfMatrixOut, indexOfMatrixIn);
-
+ 
             matOut[indexOfMatrixOut] = matIn[indexOfMatrixIn];
          }
 }  /* Mat_add */
