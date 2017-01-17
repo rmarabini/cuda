@@ -56,6 +56,8 @@ __global__ void rotMatFunc(float matIn[],
         {
             matOut[indexOfMatrixOut] = 5.;//matIn[indexOfMatrixIn];
          }
+   else
+       matOut[indexOfMatrixOut] = 6.; 
 }  /* Mat_add */
 
 
