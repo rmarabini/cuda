@@ -128,7 +128,7 @@ int main(int argc, char* argv[]) {
    rotMat[1][0] = +1.f;
    rotMat[1][1] = 0.f;
 
-   Print_matrix("A =", h_A, numVec, dimVec, 10, 10);
+   Print_matrix("A =", h_A, dimX, dimY, 10, 10);
    printf("rotMat=\n%.3f %.3f \n %.3f %.3f\n\n",rotMat[0][0],rotMat[0][1],rotMat[1][0],rotMat[1][1]);
    printf("Rotating matrices on CPU...\n");
    cudaEventRecord(hostStart, 0);
