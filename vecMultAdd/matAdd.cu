@@ -18,12 +18,12 @@
  */
 __global__ void Mat_add_Vector(float matIn[], float vRef[], float matOut[], int numVec, int vecDim) {
     int threadCol = blockIdx.x * blockDim.x + threadIdx.x;
-    int threadRow = blockIdx.y ;
+    int threadRow = blockIdx.x ;
 
     int indexOfMatrix = threadCol + threadRow * vecDim;
 
     if(threadCol < vecDim && threadRow < numVec)
-        C[indexOfMatrix] = A[indexOfMatrix] + B[indexOfMatrix];
+        matOut[indexOfMatrix] = matIn[indexOfMatrix] + vRef[threadCol];
 }  /* Mat_add */
 
 
