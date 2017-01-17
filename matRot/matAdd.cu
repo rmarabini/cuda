@@ -41,6 +41,8 @@ printf("x=%d, y=%d, indexOUT=%d\n",x,y,indexOfMatrixOut );
    float dimXf=(float)dimX, dimYf=(float)dimY;
    xOut = (float)(x - x0)/dimXf;
    yOut = (float)(y - y0)/dimYf;
+printf("x=%d, y=%d, a0=%f, a1=%f, a2=%f, a3=%f\n",x,y,
+       rotMat[0],rotMat[1],rotMat[2],rotMat[3]);           
            
    xIn = rotMat[0] * xOut + rotMat[1] * yOut;
    yIn = rotMat[2] * xOut + rotMat[3] * yOut;
