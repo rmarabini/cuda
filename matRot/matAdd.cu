@@ -20,7 +20,7 @@
  * In args:  A, B, m, n
  * Out arg:  C
  */
-__global__ void rotMat(float matIn[], float vRef[], float matOut[], int numVec, int vecDim) {
+__global__ void rotMatFunc(float matIn[], float vRef[], float matOut[], int numVec, int vecDim) {
     int threadCol = blockIdx.y * blockDim.x + threadIdx.x;
     int threadRow = blockIdx.x ;
     int indexOfMatrix = threadCol + threadRow * vecDim;
@@ -167,7 +167,7 @@ int main(int argc, char* argv[]) {
    dim3 block(threadsPerBlock);
    dim3 grid( dimX, (dimY+threadsPerBlock-1)/threadsPerBlock );
    cudaEventRecord(deviceStart, 0);
-   rotMat<<<grid, block>>>(d_A, d_B, dimX, dimY, rotMat);
+   rotMatFunc<<<grid, block>>>(d_A, d_B, dimX, dimY, rotMat);
 
    cudaError_t code=cudaGetLastError();
    if (code)
