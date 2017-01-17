@@ -153,7 +153,7 @@ int main(int argc, char* argv[]) {
    /* which contains n threads                        */
    dim3 block(threadsPerBlock);
    dim3 grid( numVec, ceil(dimVec/threadsPerBlock) );
-   printf("block=%d, grid.x=%d, grid.y=%d",threadsPerBlock,numVec, ceil(dimVec/threadsPerBlock))
+   printf("block=%d, grid.x=%d, grid.y=%d",threadsPerBlock,numVec, ceil(dimVec/threadsPerBlock));
    cudaEventRecord(deviceStart, 0);
    //d_A -> inMatrix, d_B vRef, d_C outMat
    Mat_add_Vector<<<block, grid>>>(d_A, d_B, d_C, numVec, dimVec);
