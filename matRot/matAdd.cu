@@ -178,7 +178,7 @@ int main(int argc, char* argv[]) {
    h_A = (float*) malloc(size);
    h_B = (float*) malloc(size);
    h_B2 = (float*) malloc(size);
-   h_rotMat = (float*) malloc(4*sizeof(float),1);
+   h_rotMat = (float*) malloc(4*sizeof(float));
 
    Fill_matrix(h_A, dimX, dimY);
 
