@@ -154,9 +154,9 @@ int main(int argc, char* argv[]) {
    dim3 block(threadsPerBlock);
    dim3 grid( numVec, ceil((float)dimVec/threadsPerBlock) );
    double blocky = ((double)dimVec)/threadsPerBlock;
-   printf("dimVec=%d, threadsPerBlock=%d, ceil=%d %f\n", dimVec, threadsPerBlock, ceil(blocky),((double)dimVec)/threadsPerBlock);
-   printf("dimVec=%d, threadsPerBlock=%d, ceil=%d %f\n", dimVec, threadsPerBlock, ceil(blocky),((double)dimVec)/threadsPerBlock);
-   printf("dimVec=%d, threadsPerBlock=%d, ceil=%d %f\n", dimVec, threadsPerBlock, ceil(blocky),((double)dimVec)/threadsPerBlock);
+   printf("dimVec=%d, threadsPerBlock=%d, ceil=%d %f\n", dimVec, threadsPerBlock, ceil(blocky), blocky);
+   printf("dimVec=%d, threadsPerBlock=%d, ceil=%d %f\n", dimVec, threadsPerBlock, ceil(blocky), blocky);
+   printf("dimVec=%d, threadsPerBlock=%d, ceil=%d %f\n", dimVec, threadsPerBlock, ceil(blocky), blocky);
 //   printf("block=%d, grid.x=%d, grid.y=%d\n"          ,threadsPerBlock,numVec, ceil((float)dimVec/threadsPerBlock));
 //   printf("kkkk=%d %d %d", ceil((float)dimVec/threadsPerBlock),dimVec,threadsPerBlock);
    cudaEventRecord(deviceStart, 0);
