@@ -213,7 +213,7 @@ int main(int argc, char* argv[]) {
 
    /* Invoke kernel using dimX * dimY thread blocks, each of    */
    /* which contains threadsPerBlock threads                        */
-   threadsPerBlock = min(threadsPerBlock, dimY);
+   threadsPerBlock = min(threadsPerBlock, (int)dimY);
    dim3 block(threadsPerBlock);
    dim3 grid( dimX, (dimY+threadsPerBlock-1)/threadsPerBlock );
    cudaEventRecord(deviceStart, 0);
