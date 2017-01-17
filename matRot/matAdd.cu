@@ -45,7 +45,7 @@ __global__ void rotMatFunc(float matIn[],
            
    iIn = int(xIn * dimXf + x0);
    jIn = int(yIn * dimYf + y0);
-   int indexOfMatrixIn = jIn + iIn * vecDim;
+   int indexOfMatrixIn = jIn + iIn * dimY;
 
    if ( iIn >= 0 && 
         iIn < dimX && 
