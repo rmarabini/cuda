@@ -23,14 +23,10 @@
 __global__ void Mat_add_Vector(float matIn[], float vRef[], float matOut[], int numVec, int vecDim) {
     int threadCol = blockIdx.y * blockDim.x + threadIdx.x;
     int threadRow = blockIdx.x ;
-    //if (blockIdx.y==0 && blockIdx.x==0)
-       printf("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww\n");
     int indexOfMatrix = threadCol + threadRow * vecDim;
 
     if(threadCol < vecDim )
-        {
         matOut[indexOfMatrix] = matIn[indexOfMatrix] + vRef[threadCol];
-        }
 }  /* Mat_add */
 
 
@@ -90,8 +86,8 @@ bool checkIfMatricesEqual(float * mat1, float * mat2, float matSize)
 
 /* Host code */
 int main(int argc, char* argv[]) {
-   size_t numVec = 10;//mat size
-   size_t dimVec = 10;
+   size_t numVec = 1000;//mat size
+   size_t dimVec = 1000;
 
    // variables for threads per block, number of blocks.
    int threadsPerBlock = 1024;//, blocksInGrid = 0;
