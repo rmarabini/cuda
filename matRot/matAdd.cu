@@ -153,7 +153,7 @@ int main(int argc, char* argv[]) {
    size_t dimY = 9;
 
    // variables for threads per block, number of blocks.
-   int threadsPerBlock = 1024;//, blocksInGrid = 0;
+   int threadsPerBlock = 16;//, blocksInGrid = 0;
 
    //create cuda event variables
    cudaEvent_t hostStart, hostStop, deviceStart, deviceStop;
