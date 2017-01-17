@@ -180,12 +180,12 @@ int main(int argc, char* argv[]) {
    Fill_matrix(h_A, dimX, dimY);
 
    //init rot Matrix
-   rotMat[0] = 0.f;
-   rotMat[1] = -1.f;
-   //rotMat[0] = 0.936f;
-   //rotMat[1] = 0.352f;
-   rotMat[2] = -rotMat[01];
-   rotMat[3] =  rotMat[0];
+   h_rotMat[0] = 0.f;
+   h_rotMat[1] = -1.f;
+   //h_rotMat[0] = 0.936f;
+   //h_rotMat[1] = 0.352f;
+   h_rotMat[2] = -h_rotMat[01];
+   h_rotMat[3] =  h_rotMat[0];
 
    Print_matrix("A =", h_A, dimX, dimY, 9, 9);
    printf("Rotating matrices on CPU...\n");
