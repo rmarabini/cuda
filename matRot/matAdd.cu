@@ -54,10 +54,9 @@ __global__ void rotMatFunc(float matIn[],
         jIn >= 0 && 
         jIn < dimY) 
         {
-            matOut[indexOfMatrixOut] = 5.;//matIn[indexOfMatrixIn];
+            matOut[indexOfMatrixOut] = matIn[indexOfMatrixIn];
          }
-   else
-       matOut[indexOfMatrixOut] = 6.; 
+ 
 }  /* Mat_add */
 
 
