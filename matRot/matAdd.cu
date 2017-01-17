@@ -95,21 +95,24 @@ void rotateCPU(float matIn[],
                float matOut[], int dimX, int dimY,
                float rotMat[2][2])
 {
-   float fX0,fY0;
-   int  iX0=dimX/2, iY0=dimY/2;
-   fX0 = (float)iX0;
-   fY0 = (float)iY0;
-   float xOut,yOut;
-   float xIn, yIn;
+   //float fX0,fY0;
+   int  x0=dimX/2, y0=dimY/2;
+
+   //fX0 = (float)iX0;
+   //fY0 = (float)iY0;
+   int xOut,yOut;
+   int xIn, yIn;
    int iIn, jIn;
-   for(int i = 0 ; i < dimX; i++)
-       for(int j = 0 ; j < dimY; j++){
-           xOut = i - fX0;
-           yOut = j - fY0;
-           xIn = rotMat[0][0] * xOut + rotMat[0][1] * yOut;
-           yIn = rotMat[1][0] * xOut + rotMat[1][1] * yOut;
-           iIn = int(xIn + fX0);
-           jIn = int(yIn + fY0);
+   for(int x = 0 ; x < dimX; ++x)
+       for(int y = 0 ; y < dimY; ++y){
+           xOut = x - x0;
+           yOut = y - y0;
+           
+           xIn = (int)floor(rotMat[0][0] * xOut + rotMat[0][1] * yOut);
+           yIn = (int)floor(rotMat[1][0] * xOut + rotMat[1][1] * yOut);
+           
+           iIn = int(xIn + X0);
+           jIn = int(yIn + Y0);
            matOut[i*dimY+j] = matIn[iIn*dimY+jIn];
            }
 
@@ -147,7 +150,7 @@ int main(int argc, char* argv[]) {
 
    //init rot Matrix
    float rotMat[2][2];
- 
+
    rotMat[0][0] = 0.f;
    rotMat[0][1] = -1.f;
    //rotMat[0][0] = 0.936f;
@@ -156,16 +159,14 @@ int main(int argc, char* argv[]) {
    rotMat[1][1] =  rotMat[0][0];
 
    Print_matrix("A =", h_A, dimX, dimY, 9, 9);
-   printf("rotMat=\n%.3f %.3f \n %.3f %.3f\n\n",rotMat[0][0],rotMat[0][1],rotMat[1][0],rotMat[1][1]);
    printf("Rotating matrices on CPU...\n");
    cudaEventRecord(hostStart, 0);
-   //////////
+   //rotate matrix using CPU
    rotateCPU(h_A ,h_B2, dimX, dimY, rotMat);
-
    //////////
    cudaEventRecord(hostStop, 0);
    cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
-   printf("Matrix addition over. Time taken on CPU: %5.5f\n",     
+   printf("Matrix rotation over. Time taken on CPU: %5.5f\n",     
           timeDifferenceOnHost);
    Print_matrix("B2(CPU) =", h_B2, dimX, dimY, 9, 9);
 
