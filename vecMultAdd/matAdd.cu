@@ -107,7 +107,7 @@ int main(int argc, char* argv[]) {
    printf("dimVec = %d, numVec = %d\n", dimVec, numVec);
    matrixSize = numVec*dimVec;
    size = matrixSize*sizeof(float);
-   int vecSize=dimVec*sizeof(float);
+   size_t vecSize=dimVec*sizeof(float);
 
    h_A = (float*) malloc(size);
    h_B = (float*) malloc(vecSize);
@@ -123,10 +123,10 @@ int main(int argc, char* argv[]) {
    printf("Adding matrices on CPU...\n");
    cudaEventRecord(hostStart, 0);
    for(int i = 0 ; i < numVec; i++)
-       for(int j = 0 ; j < dimVec; j++)
+       for(int j = 0 ; j < dimVec; j++){
            h_C2[i*dimVec+j] = h_A[i*dimVec+j] + h_B[j];
-   Print_matrix("C(CPU) =", h_C2, 4, 5);
-
+           printf("i=%d, j=%d C2=%f a=%f b=%f",i,j,h_C2[i*dimVec+j],h_A[i*dimVec+j],h_B[j]);
+            }
    cudaEventRecord(hostStop, 0);
    cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
    printf("Matrix addition over. Time taken on CPU: %5.5f\n",     
