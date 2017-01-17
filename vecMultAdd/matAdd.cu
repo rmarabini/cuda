@@ -22,7 +22,7 @@ __global__ void Mat_add_Vector(float matIn[], float vRef[], float matOut[], int 
 
     int indexOfMatrix = threadCol + threadRow * vecDim;
 
-    if(threadCol < m && threadRow < numVec)
+    if(threadCol < vecDim && threadRow < numVec)
         C[indexOfMatrix] = A[indexOfMatrix] + B[indexOfMatrix];
 }  /* Mat_add */
 
