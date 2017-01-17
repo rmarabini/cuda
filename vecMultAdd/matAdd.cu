@@ -107,9 +107,10 @@ int main(int argc, char* argv[]) {
    printf("dimVec = %d, numVec = %d\n", dimVec, numVec);
    matrixSize = numVec*dimVec;
    size = matrixSize*sizeof(float);
+   vecSize=dimVec*sizeof(float);
 
    h_A = (float*) malloc(size);
-   h_B = (float*) malloc(dimVec*sizeof(float));
+   h_B = (float*) malloc(vecSize);
    h_C = (float*) malloc(size);
    h_C2 = (float*) malloc(size);
    
@@ -134,12 +135,12 @@ int main(int argc, char* argv[]) {
 
    /* Allocate matrices in device memory */
    cudaMalloc(&d_A, size);
-   cudaMalloc(&d_B, dimVec*sizeof(float));
+   cudaMalloc(&d_B, vecSize);
    cudaMalloc(&d_C, size);
 
    /* Copy matrices from host memory to device memory */
    cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
-   cudaMemcpy(d_B, h_B, dimVec, cudaMemcpyHostToDevice);
+   cudaMemcpy(d_B, h_B, vecSize, cudaMemcpyHostToDevice);
 
    //create a proper grid block using dim3
 
