@@ -30,6 +30,8 @@ __global__ void rotMatFunc(float matIn[],
 //    int x = blockIdx.x * blockDim.x + threadIdx.x;
     int y = blockIdx.y * blockDim.x + threadIdx.x;
     int x = blockIdx.x ;
+   if ( x >= dimX || y > dimY) 
+        return;
 //    const unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
 //    const unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
     int indexOfMatrixOut = y + x * dimY;
