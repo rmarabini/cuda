@@ -20,16 +20,16 @@
  * Out arg:  C
  */
 __global__ void Mat_add_Vector(float matIn[], float vRef[], float matOut[], int numVec, int vecDim) {
-    int threadCol = blockIdx.y * blockDim.x + threadIdx.x;
-    int threadRow = blockIdx.x ;
+//    int threadCol = blockIdx.y * blockDim.x + threadIdx.x;
+//    int threadRow = blockIdx.x ;
     //if (blockIdx.y==0 && blockIdx.x==0)
        printf("col=%d, row=%dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww\n",threadCol,threadRow);
-    int indexOfMatrix = threadCol + threadRow * vecDim;
+//    int indexOfMatrix = threadCol + threadRow * vecDim;
 
-    if(threadCol < vecDim )
-        {
-        matOut[indexOfMatrix] = matIn[indexOfMatrix] + vRef[threadCol];
-        }
+//    if(threadCol < vecDim )
+//        {
+//        matOut[indexOfMatrix] = matIn[indexOfMatrix] + vRef[threadCol];
+//        }
 }  /* Mat_add */
 
 
