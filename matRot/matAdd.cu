@@ -30,27 +30,22 @@ __global__ void rotMatFunc(float matIn[],
     int x = blockIdx.x ;
 
     int indexOfMatrixOut = y + x * dimY;
-printf("x=%d, y=%d, indexOUT=%d\n",x,y,indexOfMatrixOut );
-
     int  x0=dimX/2, y0=dimY/2;//this may be passed
 
-////////////
    float xOut,yOut;
    float xIn, yIn;
    int iIn, jIn;
    float dimXf=(float)dimX, dimYf=(float)dimY;
    xOut = (float)(x - x0)/dimXf;
    yOut = (float)(y - y0)/dimYf;
-printf("x=%d, y=%d, a0=%f, a1=%f, a2=%f, a3=%f\n",x,y,
-       rotMat[0],rotMat[1],rotMat[2],rotMat[3]);           
-           
+
    xIn = rotMat[0] * xOut + rotMat[1] * yOut;
    yIn = rotMat[2] * xOut + rotMat[3] * yOut;
-printf("x=%d, y=%d, xIn=%f, yIn=%f\n",x,y,xIn, yIn);           
+
    iIn = int(xIn * dimXf + x0);
    jIn = int(yIn * dimYf + y0);
    int indexOfMatrixIn = jIn + iIn * dimY;
-printf("x=%d, y=%d, iIn=%f, jIn=%f, indexOUT=%d\n",x,y,iIn, jIn, indexOfMatrixOut );
+
    if ( iIn >= 0 && 
         iIn < dimX && 
         jIn >= 0 && 
