@@ -17,7 +17,7 @@
  * Out arg:  C
  */
 __global__ void Mat_add_Vector(float matIn[], float vRef[], float matOut[], int numVec, int vecDim) {
-    int threadCol = blockIdx.x * blockDim.x + threadIdx.x;
+    int threadCol = blockIdx.y * blockDim.x + threadIdx.x;
     int threadRow = blockIdx.x ;
 
     int indexOfMatrix = threadCol + threadRow * vecDim;
@@ -122,7 +122,7 @@ int main(int argc, char* argv[]) {
    cudaEventRecord(hostStart, 0);
    for(int i = 0 ; i < numVec; i++)
        for(int j = 0 ; j < dimVec; j++)
-           h_C2[i][j] = h_A[i][j] + h_B[j];
+           h_C2[i*dimVec+j] = h_A[i*dimVec+j] + h_B[j];
 
    cudaEventRecord(hostStop, 0);
    cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
