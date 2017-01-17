@@ -152,12 +152,13 @@ int main(int argc, char* argv[]) {
 
    /* Invoke kernel using m thread blocks, each of    */
    /* which contains n threads                        */
-   double blocky = ((double)dimVec)/threadsPerBlock;
+
    dim3 block(threadsPerBlock);
    dim3 grid( numVec, (dimVec+threadsPerBlock-1)/threadsPerBlock );
    cudaEventRecord(deviceStart, 0);
    //d_A -> inMatrix, d_B vRef, d_C outMat
 //block=1024, grid.x=10, grid.y=1024
+   printf("grid.x=%d grid.y=%d block.x=%d",grid.x, grid.y, block.x);
    Mat_add_Vector<<<grid, block>>>(d_A, d_B, d_C, numVec, dimVec);
 //error=invalid configuration argumentvalues different for i: 0
 
