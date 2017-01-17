@@ -78,7 +78,7 @@ main(void)
     cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
     cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
     cudaEventRecord(stopMem, 0) ;
-    cudaEventElapsedTime(&time, startEvent, stopEvent) 
+    cudaEventElapsedTime(&time, startMem, stopMem) 
     printf("time=%f,  Host to Device bandwidth (GB/s): %fn", time, numElements * 1e-6 / time);
     
     // Launch the Vector Add CUDA Kernel
