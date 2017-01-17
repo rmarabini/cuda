@@ -113,7 +113,7 @@ int main(int argc, char* argv[]) {
    h_B = (float*) malloc(vecSize);
    h_C = (float*) malloc(size);
    h_C2 = (float*) malloc(size);
-   printf("size=%d vecSize=%d",size,vecSize);
+   printf("size=%d vecSize=%d\n",size,vecSize);
    Fill_matrix(h_A, numVec, dimVec);
    Fill_matrix(h_B, 1, dimVec);
 
@@ -125,7 +125,7 @@ int main(int argc, char* argv[]) {
    for(int i = 0 ; i < numVec; i++)
        for(int j = 0 ; j < dimVec; j++){
            h_C2[i*dimVec+j] = h_A[i*dimVec+j] + h_B[j];
-           //printf("i=%d, j=%d C2=%f a=%f b=%f\n",i,j,h_C2[i*dimVec+j],h_A[i*dimVec+j],h_B[j]);
+           printf("i=%d, j=%d C2=%f a=%f b=%f\n",i,j,h_C2[i*dimVec+j],h_A[i*dimVec+j],h_B[j]);
             }
    cudaEventRecord(hostStop, 0);
    cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
