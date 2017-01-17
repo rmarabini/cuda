@@ -20,7 +20,8 @@
  * In args:  A, B, m, n
  * Out arg:  C
  */
-__global__ void rotMatFunc(float matIn[], float vRef[], float matOut[], int numVec, int vecDim) {
+
+__global__ void rotMatFunc(float matIn[], float matOut[], int numVec, int vecDim, float rotMat[][]) {
     int threadCol = blockIdx.y * blockDim.x + threadIdx.x;
     int threadRow = blockIdx.x ;
     int indexOfMatrix = threadCol + threadRow * vecDim;
