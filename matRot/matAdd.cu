@@ -25,11 +25,11 @@ __global__ void rotMatFunc(float matIn[],
                            float matOut[], 
                            int dimX, 
                            int dimY, 
-                           float rotMat[2][2]) {
+                           float rotMat[]) {
     int y = blockIdx.y * blockDim.x + threadIdx.x;
     int x = blockIdx.x ;
     int indexOfMatrixOut = y + x * dimY;
-    return;
+
     int  x0=dimX/2, y0=dimY/2;//this may be passed
 
 ////////////
@@ -40,8 +40,8 @@ __global__ void rotMatFunc(float matIn[],
    xOut = (float)(x - x0)/dimXf;
    yOut = (float)(y - y0)/dimYf;
            
-   xIn = rotMat[0][0] * xOut + rotMat[0][1] * yOut;
-   yIn = rotMat[1][0] * xOut + rotMat[1][1] * yOut;
+   xIn = rotMat[0] * xOut + rotMat[1] * yOut;
+   yIn = rotMat[2] * xOut + rotMat[3] * yOut;
            
    iIn = int(xIn * dimXf + x0);
    jIn = int(yIn * dimYf + y0);
@@ -115,7 +115,7 @@ bool checkIfMatricesEqual(float * mat1, float * mat2, float matSize)
 }
 void rotateCPU(float matIn[], 
                float matOut[], int dimX, int dimY,
-               float rotMat[2][2])
+               float rotMat[])
 {
    //float fX0,fY0;
    int  x0=dimX/2, y0=dimY/2;
@@ -131,8 +131,8 @@ void rotateCPU(float matIn[],
            xOut = (float)(x - x0)/dimXf;
            yOut = (float)(y - y0)/dimYf;
            
-           xIn = rotMat[0][0] * xOut + rotMat[0][1] * yOut;
-           yIn = rotMat[1][0] * xOut + rotMat[1][1] * yOut;
+           xIn = rotMat[0] * xOut + rotMat[1] * yOut;
+           yIn = rotMat[2] * xOut + rotMat[3] * yOut;
            
            iIn = int(xIn * dimXf + x0);
            jIn = int(yIn * dimYf + y0);
@@ -163,8 +163,8 @@ int main(int argc, char* argv[]) {
    cudaEventCreate(&deviceStart);
    cudaEventCreate(&deviceStop);
 
-   float *h_A, *h_B, *h_B2;//PC
-   float *d_A, *d_B;//GPU
+   float *h_A, *h_B, *h_B2, *h_rotMat;//PC
+   float *d_A, *d_B, *d_rotMat;//GPU
    size_t size, matrixSize;
 
    /* Get size of matrices */
@@ -175,22 +175,23 @@ int main(int argc, char* argv[]) {
    h_A = (float*) malloc(size);
    h_B = (float*) calloc(size,1);
    h_B2 = (float*) calloc(size,1);
+   h_rotMat = (float*) calloc(4,1);
+
    Fill_matrix(h_A, dimX, dimY);
 
    //init rot Matrix
-   float rotMat[2][2];
-   rotMat[0][0] = 0.f;
-   rotMat[0][1] = -1.f;
-   //rotMat[0][0] = 0.936f;
-   //rotMat[0][1] = 0.352f;
-   rotMat[1][0] = -rotMat[0][1];
-   rotMat[1][1] =  rotMat[0][0];
+   rotMat[0] = 0.f;
+   rotMat[1] = -1.f;
+   //rotMat[0] = 0.936f;
+   //rotMat[1] = 0.352f;
+   rotMat[2] = -rotMat[01];
+   rotMat[3] =  rotMat[0];
 
    Print_matrix("A =", h_A, dimX, dimY, 9, 9);
    printf("Rotating matrices on CPU...\n");
    cudaEventRecord(hostStart, 0);
    //rotate matrix using CPU
-   rotateCPU(h_A ,h_B2, dimX, dimY, rotMat);
+   rotateCPU(h_A ,h_B2, dimX, dimY, h_rotMat);
    //////////
    cudaEventRecord(hostStop, 0);
    cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
@@ -201,9 +202,11 @@ int main(int argc, char* argv[]) {
    /* Allocate matrices in device memory */
    cudaMalloc(&d_A, size);
    cudaMalloc(&d_B, size);
+   cudaMalloc(&d_rotMat, 4);
 
    /* Copy matrices from host memory to device memory */
    cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
+   cudaMemcpy(d_rotMat, h_rotMat, 4, cudaMemcpyHostToDevice);
 
    //create a proper grid block using dim3
 
@@ -213,7 +216,7 @@ int main(int argc, char* argv[]) {
    dim3 block(threadsPerBlock);
    dim3 grid( dimX, (dimY+threadsPerBlock-1)/threadsPerBlock );
    cudaEventRecord(deviceStart, 0);
-   rotMatFunc<<<grid, block>>>(d_A, d_B, dimX, dimY, rotMat);
+   rotMatFunc<<<grid, block>>>(d_A, d_B, dimX, dimY, d_rotMat);
 
    cudaError_t code=cudaGetLastError();
    if (code)
