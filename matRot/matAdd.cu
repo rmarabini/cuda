@@ -26,9 +26,10 @@ __global__ void rotMatFunc(float matIn[],
                            int dimX, 
                            int dimY, 
                            float rotMat[]) {
-    int y = blockIdx.y * blockDim.x + threadIdx.x;
+    int y = blockIdx.y * blockDim.y + threadIdx.x;
     int x = blockIdx.x ;
-
+//    const unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
+//    const unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
     int indexOfMatrixOut = y + x * dimY;
     int  x0=dimX/2, y0=dimY/2;//this may be passed
 
@@ -51,7 +52,6 @@ __global__ void rotMatFunc(float matIn[],
         jIn >= 0 && 
         jIn < dimY) 
         {
- 
             matOut[indexOfMatrixOut] = matIn[indexOfMatrixIn];
          }
 }  /* Mat_add */
@@ -153,7 +153,7 @@ int main(int argc, char* argv[]) {
    size_t dimY = _dimY;
 
    // variables for threads per block, number of blocks.
-   int threadsPerBlock = 1024;//, blocksInGrid = 0;
+   int threadsPerBlock = 32;//, blocksInGrid = 0;
    //threadsPerBlock = min(_dimY, _dimY);
    //create cuda event variables
    cudaEvent_t hostStart, hostStop, deviceStart, deviceStop;
@@ -213,7 +213,7 @@ int main(int argc, char* argv[]) {
 
    /* Invoke kernel using dimX * dimY thread blocks, each of    */
    /* which contains threadsPerBlock threads                        */
-
+   
    dim3 block(threadsPerBlock);
    dim3 grid( dimX, (dimY+threadsPerBlock-1)/threadsPerBlock );
    cudaEventRecord(deviceStart, 0);
