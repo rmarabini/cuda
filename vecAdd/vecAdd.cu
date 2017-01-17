@@ -82,7 +82,7 @@ main(void)
     cudaEventRecord(stopMem, 0) ;
     cudaEventSynchronize( stopMem );
     cudaEventElapsedTime(&time, startMem, stopMem);
-    printf("time=%f,  Host to Device bandwidth (GB/s): %fn", time, numElements * 1e-6 / time);
+    printf("time=%f,  Host to Device bandwidth (GB/s): %f\n", time, numElements * 1e-6 / time);
     
     // Launch the Vector Add CUDA Kernel
 ///*
