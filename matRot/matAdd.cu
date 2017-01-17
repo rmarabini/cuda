@@ -34,7 +34,7 @@ __global__ void rotMatFunc(float matIn[],
 //    const unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
     int indexOfMatrixOut = y + x * dimY;
     int  x0=dimX/2, y0=dimY/2;//this may be passed
-   return;
+
    float xOut,yOut;
    float xIn, yIn;
    int iIn, jIn;
@@ -54,7 +54,7 @@ __global__ void rotMatFunc(float matIn[],
         jIn >= 0 && 
         jIn < dimY) 
         {
-            matOut[indexOfMatrixOut] = matIn[indexOfMatrixIn];
+            matOut[indexOfMatrixOut] = 5;//matIn[indexOfMatrixIn];
          }
 }  /* Mat_add */
 
