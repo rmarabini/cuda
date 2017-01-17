@@ -158,7 +158,7 @@ int main(int argc, char* argv[]) {
    cudaEventRecord(deviceStart, 0);
    //d_A -> inMatrix, d_B vRef, d_C outMat
 //block=1024, grid.x=10, grid.y=1024
-   Mat_add_Vector<<<block, grid>>>(d_A, d_B, d_C, numVec, dimVec);
+   Mat_add_Vector<<<grid, block>>>(d_A, d_B, d_C, numVec, dimVec);
 //error=invalid configuration argumentvalues different for i: 0
 
    cudaError_t code=cudaGetLastError();
