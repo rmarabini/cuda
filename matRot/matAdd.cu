@@ -96,8 +96,10 @@ bool checkIfMatricesEqual(float * mat1, float * mat2, float matSize)
 int main(int argc, char* argv[]) {
    size_t dimX = 9;//mat size
    size_t dimY = 9;
-   float fX0=dimX/2., fY0=dimY/2.;
+   float fX0,fY0;
    int  iX0=dimX/2, iY0=dimY/2;
+   fX0 = (float)iX0;
+   fY0 = (float)iY0;
 
    // variables for threads per block, number of blocks.
    int threadsPerBlock = 1024;//, blocksInGrid = 0;
