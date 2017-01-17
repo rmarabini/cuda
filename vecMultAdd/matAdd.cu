@@ -107,7 +107,7 @@ int main(int argc, char* argv[]) {
    printf("dimVec = %d, numVec = %d\n", dimVec, numVec);
    matrixSize = numVec*dimVec;
    size = matrixSize*sizeof(float);
-   vecSize=dimVec*sizeof(float);
+   int vecSize=dimVec*sizeof(float);
 
    h_A = (float*) malloc(size);
    h_B = (float*) malloc(vecSize);
