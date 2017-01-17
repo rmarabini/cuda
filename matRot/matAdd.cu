@@ -118,9 +118,9 @@ void rotateCPU(float matIn[],
            if ( iIn >= 0 && 
                 iIn < dimX && 
                 jIn >= 0 && 
-                jIn < dimY) {
+                jIn < dimY) 
 
-           matOut[x*dimY+y] = matIn[iIn*dimY+jIn];
+                matOut[x*dimY+y] = matIn[iIn*dimY+jIn];
            }
 
 }
