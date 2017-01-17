@@ -13,6 +13,7 @@
 //#include "cuPrintf.cu"
  //#include "utils/cuPrintf.cu"
 
+
 /*---------------------------------------------------------------------
  * Kernel:   Mat_add
  * Purpose:  Implement matrix addition
@@ -151,14 +152,9 @@ int main(int argc, char* argv[]) {
 
    /* Invoke kernel using m thread blocks, each of    */
    /* which contains n threads                        */
-   dim3 block(threadsPerBlock);
-   dim3 grid( numVec, ceil((float)dimVec/threadsPerBlock) );
    double blocky = ((double)dimVec)/threadsPerBlock;
-   printf("dimVec=%d, threadsPerBlock=%d, ceil=%d %f\n", dimVec, threadsPerBlock, ceil(blocky), blocky);
-   printf("dimVec=%d, threadsPerBlock=%d, ceil=%d %f\n", dimVec, threadsPerBlock, ceil(blocky), blocky);
-   printf("dimVec=%d, threadsPerBlock=%d, ceil=%d %f\n", dimVec, threadsPerBlock, ceil(blocky), blocky);
-//   printf("block=%d, grid.x=%d, grid.y=%d\n"          ,threadsPerBlock,numVec, ceil((float)dimVec/threadsPerBlock));
-//   printf("kkkk=%d %d %d", ceil((float)dimVec/threadsPerBlock),dimVec,threadsPerBlock);
+   dim3 block(threadsPerBlock);
+   dim3 grid( numVec, (dimVec+threadsPerBlock-1)/threadsPerBlock );
    cudaEventRecord(deviceStart, 0);
    //d_A -> inMatrix, d_B vRef, d_C outMat
 //block=1024, grid.x=10, grid.y=1024
