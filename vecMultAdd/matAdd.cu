@@ -154,7 +154,7 @@ int main(int argc, char* argv[]) {
    dim3 block(threadsPerBlock);
    dim3 grid( numVec, 1+dimVec/threadsPerBlock );
    printf("dimVec=%d, threadsPerBlock=%d, ceil=%f\n", dimVec, threadsPerBlock, 1 + dimVec/threadsPerBlock);
-   printf("block=%d, grid.x=%d, grid.y=%d",threadsPerBlock,numVec, ceil(dimVec/threadsPerBlock));
+   printf("block=%d, grid.x=%d, grid.y=%d",threadsPerBlock,numVec, 1 + dimVec/threadsPerBlock);
    cudaEventRecord(deviceStart, 0);
    //d_A -> inMatrix, d_B vRef, d_C outMat
 //block=1024, grid.x=10, grid.y=1024
