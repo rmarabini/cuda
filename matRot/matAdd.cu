@@ -100,19 +100,26 @@ void rotateCPU(float matIn[],
 
    //fX0 = (float)iX0;
    //fY0 = (float)iY0;
-   int xOut,yOut;
-   int xIn, yIn;
+   float xOut,yOut;
+   float xIn, yIn;
    int iIn, jIn;
+   float dimXf=(float)dimX, dimYf=(float)dimY;
    for(int x = 0 ; x < dimX; ++x)
        for(int y = 0 ; y < dimY; ++y){
-           xOut = x - x0;
-           yOut = y - y0;
+           xOut = (float)(x - x0)/dimXf;
+           yOut = (float)(y - y0)/dimYf;
            
-           xIn = (int)floor(rotMat[0][0] * xOut + rotMat[0][1] * yOut);
-           yIn = (int)floor(rotMat[1][0] * xOut + rotMat[1][1] * yOut);
+           xIn = rotMat[0][0] * xOut + rotMat[0][1] * yOut;
+           yIn = rotMat[1][0] * xOut + rotMat[1][1] * yOut;
            
-           iIn = int(xIn + x0);
-           jIn = int(yIn + y0);
+           iIn = int(xIn * dimXf + x0);
+           jIn = int(yIn * dimYf + y0);
+
+           if ( iIn >= 0 && 
+                iIn < dimX && 
+                jIn >= 0 && 
+                jIn < dimY) {
+
            matOut[x*dimY+y] = matIn[iIn*dimY+jIn];
            }
 
