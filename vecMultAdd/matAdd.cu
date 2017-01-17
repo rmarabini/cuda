@@ -84,8 +84,8 @@ bool checkIfMatricesEqual(float * mat1, float * mat2, float matSize)
 
 /* Host code */
 int main(int argc, char* argv[]) {
-   size_t numVec = 5;//mat size
-   size_t dimVec = 5;
+   size_t numVec = 10;//mat size
+   size_t dimVec = 10;
 
    // variables for threads per block, number of blocks.
    int threadsPerBlock = 1024;//, blocksInGrid = 0;
