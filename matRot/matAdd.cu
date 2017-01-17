@@ -160,7 +160,7 @@ int main(int argc, char* argv[]) {
    printf("Rotating matrices on CPU...\n");
    cudaEventRecord(hostStart, 0);
    //////////
-   rotateCPU(h_A,h_B2, dimX, dimY, rotMat[2][2]);
+   rotateCPU(h_A ,h_B2, dimX, dimY, rotMat);
 
    //////////
    cudaEventRecord(hostStop, 0);
