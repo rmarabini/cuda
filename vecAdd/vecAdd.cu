@@ -61,6 +61,10 @@ main(void)
     }
 
     // Allocate the device vectors A, B and C
+    cudaEventCreate(&startMem);
+    cudaEventCreate(&stopMem);
+    cudaEventRecord(startMem, 0) ;
+
     float *d_A, *d_B, *d_C;
     cudaMalloc((void **)&d_A, size);
     cudaMalloc((void **)&d_B, size);
@@ -73,7 +77,9 @@ main(void)
     // Copy the host input vectors A and B to the device
     cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
     cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
-
+    cudaEventRecord(stopMem, 0) ;
+    cudaEventElapsedTime(&time, startEvent, stopEvent) 
+    printf("time=%f,  Host to Device bandwidth (GB/s): %fn", time, numElements * 1e-6 / time);
     
     // Launch the Vector Add CUDA Kernel
 ///*
