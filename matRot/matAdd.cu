@@ -34,7 +34,7 @@ __global__ void rotMatFunc(float matIn[],
 //    const unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
     int indexOfMatrixOut = y + x * dimY;
     int  x0=dimX/2, y0=dimY/2;//this may be passed
-
+   return;
    float xOut,yOut;
    float xIn, yIn;
    int iIn, jIn;
