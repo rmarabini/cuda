@@ -23,15 +23,37 @@
 
 __global__ void rotMatFunc(float matIn[], 
                            float matOut[], 
-                           int numVec, 
-                           int vecDim, 
+                           int dimX, 
+                           int dimY, 
                            float rotMat[2][2]) {
-    int threadCol = blockIdx.y * blockDim.x + threadIdx.x;
-    int threadRow = blockIdx.x ;
-    int indexOfMatrix = threadCol + threadRow * vecDim;
+    int y = blockIdx.y * blockDim.x + threadIdx.x;
+    int x = blockIdx.x ;
+    int indexOfMatrixOut = y + x * vecDim;
 
-    if(threadCol < vecDim )
-        matOut[indexOfMatrix] = matIn[indexOfMatrix];// + vRef[threadCol];
+    int  x0=dimX/2, y0=dimY/2;//this may be passed
+
+////////////
+   float xOut,yOut;
+   float xIn, yIn;
+   int iIn, jIn;
+   float dimXf=(float)dimX, dimYf=(float)dimY;
+   xOut = (float)(x - x0)/dimXf;
+   yOut = (float)(y - y0)/dimYf;
+           
+   xIn = rotMat[0][0] * xOut + rotMat[0][1] * yOut;
+   yIn = rotMat[1][0] * xOut + rotMat[1][1] * yOut;
+           
+   iIn = int(xIn * dimXf + x0);
+   jIn = int(yIn * dimYf + y0);
+   int indexOfMatrixIn = jIn + iIn * vecDim;
+
+   if ( iIn >= 0 && 
+        iIn < dimX && 
+        jIn >= 0 && 
+        jIn < dimY) 
+
+        matOut[indexOfMatrixOut] = matIn[indexOfMatrixIn];
+   }
 }  /* Mat_add */
 
 
@@ -157,7 +179,6 @@ int main(int argc, char* argv[]) {
 
    //init rot Matrix
    float rotMat[2][2];
-
    rotMat[0][0] = 0.f;
    rotMat[0][1] = -1.f;
    //rotMat[0][0] = 0.936f;
