@@ -19,12 +19,14 @@
 __global__ void Mat_add_Vector(float matIn[], float vRef[], float matOut[], int numVec, int vecDim) {
     int threadCol = blockIdx.y * blockDim.x + threadIdx.x;
     int threadRow = blockIdx.x ;
-    //if (blockIdx.y==0 && blockIdx.x==0)
-    //   printf("col=%d, row=%d",threadCol,threadRow);
+    if (blockIdx.y==0 && blockIdx.x==0)
+       printf("col=%d, row=%d",threadCol,threadRow);
     int indexOfMatrix = threadCol + threadRow * vecDim;
 
     if(threadCol < vecDim )
+        {
         matOut[indexOfMatrix] = matIn[indexOfMatrix] + vRef[threadCol];
+        }
 }  /* Mat_add */
 
 
@@ -152,6 +154,7 @@ int main(int argc, char* argv[]) {
    cudaEventRecord(deviceStart, 0);
    //d_A -> inMatrix, d_B vRef, d_C outMat
    Mat_add_Vector<<<block, grid>>>(d_A, d_B, d_C, numVec, dimVec);
+   cudaDeviceSynchronize();
    cudaEventRecord(deviceStop, 0);
 
    /* Wait for the kernel to complete */
