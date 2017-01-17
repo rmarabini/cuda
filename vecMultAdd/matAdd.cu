@@ -16,13 +16,13 @@
  * In args:  A, B, m, n
  * Out arg:  C
  */
-__global__ void Mat_add(float A[], float B[], float C[], int m, int n) {
+__global__ void Mat_add_Vector(float matIn[], float vRef[], float matOut[], int numVec, int vecDim) {
     int threadCol = blockIdx.x * blockDim.x + threadIdx.x;
     int threadRow = blockIdx.y * blockDim.y + threadIdx.y;
 
-    int indexOfMatrix = threadCol + threadRow * m;
+    int indexOfMatrix = threadCol + threadRow * numVec;
 
-    if(threadCol < m && threadRow < n)
+    if(threadCol < m && threadRow < vecDim)
         C[indexOfMatrix] = A[indexOfMatrix] + B[indexOfMatrix];
 }  /* Mat_add */
 
@@ -83,11 +83,11 @@ bool checkIfMatricesEqual(float * mat1, float * mat2, float matSize)
 
 /* Host code */
 int main(int argc, char* argv[]) {
-   size_t m = 1000;//mat size
-   size_t n = 1000;
+   size_t numVec = 1000;//mat size
+   size_t dimVec = 1000;
 
    // variables for threads per block, number of blocks.
-   int threadsPerBlock = 16;//, blocksInGrid = 0;
+   int threadsPerBlock = 1024;//, blocksInGrid = 0;
 
    //create cuda event variables
    cudaEvent_t hostStart, hostStop, deviceStart, deviceStop;
@@ -103,25 +103,26 @@ int main(int argc, char* argv[]) {
    size_t size, matrixSize;
 
    /* Get size of matrices */
-   printf("m = %d, n = %d\n", m, n);
-   matrixSize = m*n;
+   printf("dimVec = %d, numVec = %d\n", dimVec, numVec);
+   matrixSize = numVec*dimVec;
    size = matrixSize*sizeof(float);
 
    h_A = (float*) malloc(size);
-   h_B = (float*) malloc(size);
+   h_B = (float*) malloc(dimVec);
    h_C = (float*) malloc(size);
    h_C2 = (float*) malloc(size);
    
-   Fill_matrix(h_A, m, n);
-   Fill_matrix(h_B, m, n);
+   Fill_matrix(h_A, numVec, dimVec);
+   Fill_matrix(h_B, 1, dimVec);
 
    Print_matrix("A =", h_A, 4, 5);
-   Print_matrix("B =", h_B, 4, 5);
+   Print_matrix("B =", h_B, 1, 5);
 
    printf("Adding matrices on CPU...\n");
    cudaEventRecord(hostStart, 0);
-   for(int i = 0 ; i < m*n; i++)
-           h_C2[i] = h_A[i] + h_B[i];
+   for(int i = 0 ; i < numVec; i++)
+       for(int j = 0 ; j < dimVec; j++)
+           h_C2[i][j] = h_A[i][j] + h_B[j];
 
    cudaEventRecord(hostStop, 0);
    cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
@@ -131,23 +132,23 @@ int main(int argc, char* argv[]) {
 
    /* Allocate matrices in device memory */
    cudaMalloc(&d_A, size);
-   cudaMalloc(&d_B, size);
+   cudaMalloc(&d_B, dimVec);
    cudaMalloc(&d_C, size);
 
    /* Copy matrices from host memory to device memory */
    cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
-   cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
+   cudaMemcpy(d_B, h_B, dimVec, cudaMemcpyHostToDevice);
 
    //create a proper grid block using dim3
 
    /* Invoke kernel using m thread blocks, each of    */
    /* which contains n threads                        */
-   dim3 block(threadsPerBlock,threadsPerBlock);
-   dim3 grid( (n + threadsPerBlock - 1/block.x), 
-              (m + block.y - 1/block.y));
+   dim3 block(threadsPerBlock);
+   dim3 grid( numVec, ceil(dimVec/threadsPerBlock) );
 
    cudaEventRecord(deviceStart, 0);
-   Mat_add<<<block, grid>>>(d_A, d_B, d_C, m, n);
+   //d_A -> inMatrix, d_B vRef, d_C outMat
+   Mat_add_Vector<<<block, grid>>>(d_A, d_B, d_C, numVec, dimVec);
    cudaEventRecord(deviceStop, 0);
 
    /* Wait for the kernel to complete */
