@@ -157,7 +157,7 @@ int main(int argc, char* argv[]) {
    cudaEventRecord(deviceStart, 0);
    //d_A -> inMatrix, d_B vRef, d_C outMat
    Mat_add_Vector<<<block, grid>>>(d_A, d_B, d_C, numVec, dimVec);
-   int code=cudaGetLastError();
+   cudaError_t code=cudaGetLastError();
    if (code)
        printf("error=%s",cudaGetErrorString(code));
    else
