@@ -42,7 +42,7 @@ main(void)
     // Use device 0 or 1    
     cudaSetDevice(0);
 
-    int numElements = 1000000;
+    int numElements = 100000000;
     size_t size = numElements * sizeof(float);
     printf("[Vector addition of %d elements]\n", numElements);
 
