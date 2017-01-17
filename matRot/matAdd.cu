@@ -51,9 +51,8 @@ __global__ void rotMatFunc(float matIn[],
         iIn < dimX && 
         jIn >= 0 && 
         jIn < dimY) 
-            printf("In =%d, out=%d\n",indexOfMatrixIn,indexOfMatrixOut );
             matOut[indexOfMatrixOut] = matIn[indexOfMatrixIn];
-   
+printf("x=%d, y=%d, In =%d, out=%d\n",x,y, indexOfMatrixIn,indexOfMatrixOut );   
 }  /* Mat_add */
 
 
