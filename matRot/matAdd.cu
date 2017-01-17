@@ -21,13 +21,17 @@
  * Out arg:  C
  */
 
-__global__ void rotMatFunc(float matIn[], float matOut[], int numVec, int vecDim, float rotMat[][]) {
+__global__ void rotMatFunc(float matIn[], 
+                           float matOut[], 
+                           int numVec, 
+                           int vecDim, 
+                           float rotMat[][]) {
     int threadCol = blockIdx.y * blockDim.x + threadIdx.x;
     int threadRow = blockIdx.x ;
     int indexOfMatrix = threadCol + threadRow * vecDim;
 
     if(threadCol < vecDim )
-        matOut[indexOfMatrix] = matIn[indexOfMatrix] + vRef[threadCol];
+        matOut[indexOfMatrix] = matIn[indexOfMatrix];// + vRef[threadCol];
 }  /* Mat_add */
 
 
