@@ -153,7 +153,7 @@ int main(int argc, char* argv[]) {
    size_t dimY = 9;
 
    // variables for threads per block, number of blocks.
-   int threadsPerBlock = 16;//, blocksInGrid = 0;
+   int threadsPerBlock = 0;//, blocksInGrid = 0;
 
    //create cuda event variables
    cudaEvent_t hostStart, hostStop, deviceStart, deviceStop;
@@ -213,7 +213,7 @@ int main(int argc, char* argv[]) {
 
    /* Invoke kernel using dimX * dimY thread blocks, each of    */
    /* which contains threadsPerBlock threads                        */
-
+   threadsPerBlock = min(threadsPerBlock, dimY);
    dim3 block(threadsPerBlock);
    dim3 grid( dimX, (dimY+threadsPerBlock-1)/threadsPerBlock );
    cudaEventRecord(deviceStart, 0);
