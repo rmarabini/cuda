@@ -23,7 +23,7 @@ __global__ void Mat_add_Vector(float matIn[], float vRef[], float matOut[], int 
     int threadCol = blockIdx.y * blockDim.x + threadIdx.x;
     int threadRow = blockIdx.x ;
     //if (blockIdx.y==0 && blockIdx.x==0)
-       printf("col=%d, row=%d",threadCol,threadRow);
+       printf("col=%d, row=%dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww\n",threadCol,threadRow);
     int indexOfMatrix = threadCol + threadRow * vecDim;
 
     if(threadCol < vecDim )
