@@ -181,7 +181,7 @@ int main(int argc, char* argv[]) {
    h_A = (float*) malloc(size);
    h_B = (float*) calloc(size,1);
    h_B2 = (float*) calloc(size,1);
-   h_rotMat = (float*) calloc(4,1);
+   h_rotMat = (float*) calloc(4*sizeof(float),1);
 
    Fill_matrix(h_A, dimX, dimY);
 
@@ -208,11 +208,11 @@ int main(int argc, char* argv[]) {
    /* Allocate matrices in device memory */
    cudaMalloc(&d_A, size);
    cudaMalloc(&d_B, size);
-   cudaMalloc(&d_rotMat, 4);
+   cudaMalloc(&d_rotMat, 4*sizeof(float));
 
    /* Copy matrices from host memory to device memory */
    cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
-   cudaMemcpy(d_rotMat, h_rotMat, 4, cudaMemcpyHostToDevice);
+   cudaMemcpy(d_rotMat, h_rotMat, 4*sizeof(float), cudaMemcpyHostToDevice);
 
    //create a proper grid block using dim3
 
