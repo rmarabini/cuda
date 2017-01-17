@@ -92,7 +92,7 @@ bool checkIfMatricesEqual(float * mat1, float * mat2, float matSize)
     return true;
 }
 void rotateCPU(float matIn[], 
-               float matOut[], dimX, dimY,
+               float matOut[], int dimX, int dimY,
                float rotMat[2][2])
 {
    float fX0,fY0;
