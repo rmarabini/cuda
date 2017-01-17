@@ -176,9 +176,9 @@ int main(int argc, char* argv[]) {
    size = matrixSize*sizeof(float);
 
    h_A = (float*) malloc(size);
-   h_B = (float*) calloc(size,1);
-   h_B2 = (float*) calloc(size,1);
-   h_rotMat = (float*) calloc(4*sizeof(float),1);
+   h_B = (float*) malloc(size);
+   h_B2 = (float*) malloc(size);
+   h_rotMat = (float*) malloc(4*sizeof(float),1);
 
    Fill_matrix(h_A, dimX, dimY);
 
