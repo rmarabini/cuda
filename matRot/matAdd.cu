@@ -106,7 +106,7 @@ int main(int argc, char* argv[]) {
    cudaEventCreate(&deviceStart);
    cudaEventCreate(&deviceStop);
 
-   float *h_A, *h_B;//PC
+   float *h_A, *h_B, *h_B2;//PC
    float *d_A, *d_B;//GPU
    size_t size, matrixSize;
 
@@ -118,7 +118,7 @@ int main(int argc, char* argv[]) {
    h_A = (float*) malloc(size);
    h_B = (float*) calloc(size,1);
    h_B2 = (float*) calloc(size,1);
-   Fill_matrix(h_A, numVec, dimVec);
+   Fill_matrix(h_A, dimX, dimY);
 
    //init rot Matrix
    float rotMat[2][2];
@@ -169,7 +169,7 @@ int main(int argc, char* argv[]) {
    cudaEventRecord(deviceStart, 0);
    //d_A -> inMatrix, d_B vRef, d_C outMat
 //block=1024, grid.x=10, grid.y=1024
-   rotMat<<<grid, block>>>(d_A, d_B, d_C, numVec, dimVec);
+   rotMat<<<grid, block>>>(d_A, d_B, dimX, dimY, rotMat);
 //error=invalid configuration argumentvalues different for i: 0
 
    cudaError_t code=cudaGetLastError();
