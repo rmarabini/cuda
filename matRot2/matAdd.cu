@@ -178,7 +178,7 @@ int main(int argc, char* argv[]) {
    size_t dimX = 9;//mat size
    size_t dimY = 9;
    printf("introduce image size and press enter");
-   scanf ("%d",&dimX); dimy=dimX; 
+   scanf ("%d",&dimX); dimY=dimX; 
 
    // variables for threads per block, number of blocks.
    int threadsPerBlockX = 32;//, blocksInGrid = 0;   
