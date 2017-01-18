@@ -132,7 +132,7 @@ void Print_matrix(const char title[], float A[], int numVec, int dimVec, int m, 
    printf("%s\n", title);
    for (i = 0; i < m; i++) {
       for (j = 0; j < n; j++)
-         printf("%.2f ", A[i*dimVec+j]);
+         printf("%.1f ", A[i*dimVec+j]);
       printf("\n");
    }  
 }  /* Print_matrix */
@@ -301,8 +301,8 @@ int main(int argc, char* argv[]) {
    printf("Finished addition on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
    printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
 
-   Print_matrix("The rotated image(CPU) is: ", h_B2, dimX, dimY, 20, 9);
-   Print_matrix("The rotated image(GPU) is: ", h_B, dimX, dimY, 20, 9);
+   Print_matrix("The rotated image(CPU) is: ", h_B2, dimX, dimY, 9, 20);
+   Print_matrix("The rotated image(GPU) is: ", h_B, dimX, dimY, 9, 20);
 
    /* Free device memory */
    cudaFree(d_A);
