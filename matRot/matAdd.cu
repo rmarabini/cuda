@@ -28,8 +28,8 @@ __global__ void rotMatFunc(float matIn[],
                            float rotMat[]) {
 //    int y = blockIdx.y;
 ///    int x = blockIdx.x * blockDim.x + threadIdx.x;
-    const  int x = blockIdx.x * blockDim.x + threadIdx.x;
-    const  int y = blockIdx.y * blockDim.y + threadIdx.y;
+    int x = blockIdx.x * blockDim.x + threadIdx.x;
+    int y = blockIdx.y * blockDim.y + threadIdx.y;
     if ( x >= dimX || y > dimY) 
          return;
     //printf("x,y = %d %d, blockIdx.x,y= %d %d,  blockDim.x,y = %d %d, threadIdx.x,y= %d %d\n",
