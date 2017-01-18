@@ -122,7 +122,7 @@ void rotateCPU(float matIn[],
                float rotMat[])
 {
    //float fX0,fY0;
-//   int  x0=dimX/2, y0=dimY/2;
+   int  x0=dimX/2, y0=dimY/2;
 
    //fX0 = (float)iX0;
    //fY0 = (float)iY0;
@@ -138,8 +138,8 @@ void rotateCPU(float matIn[],
     const int xA = (x - dimX/2 );
     const int yA = (y - dimY/2 );
 
-    const int xR = (int)floor( xA * rotMat[0] - yA * rotMat[1]);
-    const int yR = (int)floor( -xA * rotMat[2] + yA * rotMat[3]);
+    const float xR = ( xA * rotMat[0] - yA * rotMat[1]);
+    const float yR = ( -xA * rotMat[2] + yA * rotMat[3]);
   //         xIn = rotMat[0] * xOut + rotMat[1] * yOut;
   //         yIn = rotMat[2] * xOut + rotMat[3] * yOut;
 
