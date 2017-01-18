@@ -41,14 +41,18 @@ __global__ void rotMatFunc(float matIn[],
    float dimXf=(float)dimX, dimYf=(float)dimY;
    int  x0=dimX/2, y0=dimY/2;
 
-           xOut = (float)(x - x0)/dimXf;
-           yOut = (float)(y - y0)/dimYf;
+//           xOut = (float)(x - x0)/dimXf;
+//           yOut = (float)(y - y0)/dimYf;
+           xOut = (float)(x - x0);
+           yOut = (float)(y - y0);
            
            xIn = rotMat[0] * xOut + rotMat[1] * yOut;
            yIn = rotMat[2] * xOut + rotMat[3] * yOut;
            
-           iIn = int(xIn * dimXf + x0);
-           jIn = int(yIn * dimYf + y0);
+//           iIn = int(xIn * dimXf + x0);
+//           jIn = int(yIn * dimYf + y0);
+           iIn = int(xIn + x0);
+           jIn = int(yIn + y0);
 
            if ( iIn >= 0 && 
                 iIn < dimX && 
