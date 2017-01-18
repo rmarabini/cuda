@@ -72,34 +72,6 @@ __global__ void rotMatFunc(float matIn[],
 
 
 
-/*
-
-    //printf("x,y = %d %d, blockIdx.x,y= %d %d,  blockDim.x,y = %d %d, threadIdx.x,y= %d %d\n",
-    //        x,y,      blockIdx.x,blockIdx.y,      blockDim.x,blockDim.y,     threadIdx.x,threadIdx.y);
-
-   float xOut,yOut;
-   float xIn, yIn;
-   int iIn, jIn;
-   int  x0=dimX/2, y0=dimY/2;
-
-           xOut = (float)(x - x0);
-           yOut = (float)(y - y0);
-           
-           xIn = rotMat[0] * xOut + rotMat[1] * yOut;
-           yIn = rotMat[2] * xOut + rotMat[3] * yOut;
-           
-           iIn = int(xIn + x0);
-           jIn = int(yIn + y0);
-
-           if ( iIn >= 0 && 
-                iIn < dimX && 
-                jIn >= 0 && 
-                jIn < dimY) 
-                {
-                printf("x=%d y=%d iIn=%d jIn=%d in=%d, out=%d\n",x, y, iIn, jIn, iIn*dimY+jIn,x*dimY+y);
-                matOut[x*dimY+y] = matIn[iIn*dimY+jIn];
-                }
-*/
 }  /* Mat_add */
 
 
@@ -128,7 +100,6 @@ void Fill_matrix(float A[], int dimX, int dimY) {
  */
 void Print_matrix(const char title[], float A[], int numVec, int dimVec, int m, int n) {
    int i, j;
-   //numVec, dimVec
    printf("%s\n", title);
    for (i = 0; i < m; i++) {
       for (j = 0; j < n; j++)
@@ -210,7 +181,10 @@ int main(int argc, char* argv[]) {
    size_t gridY = 9;
 
    // variables for threads per block, number of blocks.
-   int threadsPerBlock = 32;//, blocksInGrid = 0;
+   int threadsPerBlockX = 32;//, blocksInGrid = 0;   
+   int threadsPerBlockY = 32;//, blocksInGrid = 0;
+   int threadsPerBlock = threadsPerBlockX * threadsPerBlockY;
+   int gridX=32, gridY=32
    //threadsPerBlock = min(_dimY, _dimY);
    //create cuda event variables
    cudaEvent_t hostStart, hostStop, deviceStart, deviceStop;
@@ -271,10 +245,10 @@ int main(int argc, char* argv[]) {
 
    /* Invoke kernel using dimX * dimY thread blocks, each of    */
    /* which contains threadsPerBlock threads                        */
-   
-   dim3 block(threadsPerBlock, threadsPerBlock);
-   dim3 grid( (dimX+threadsPerBlock-1)/threadsPerBlock, 
-              (dimY+threadsPerBlock-1)/threadsPerBlock );
+   dim3 block(threadsPerBlockX, threadsPerBlockY);   
+   dim3 grid;
+   grid.x = (dimX + block.x - 1)/block.x;
+   grid.y = (dimY + block.y - 1)/block.y;
    cudaEventRecord(deviceStart, 0);
    rotMatFunc<<<grid, block>>>(d_A, d_B, dimX, dimY, d_rotMat);
 
