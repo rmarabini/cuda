@@ -219,10 +219,10 @@ int main(int argc, char* argv[]) {
    Fill_matrix(h_A, dimX, dimY);
 
    //init rot Matrix
-   h_rotMat[0] = 1.f;
-   h_rotMat[1] = 0.f;
-   //h_rotMat[0] = 0.936f;
-   //h_rotMat[1] = 0.352f;
+   //h_rotMat[0] = 1.f;
+   //h_rotMat[1] = 0.f;
+   h_rotMat[0] = 0.936f;
+   h_rotMat[1] = 0.352f;
    h_rotMat[2] = -h_rotMat[1];
    h_rotMat[3] =  h_rotMat[0];
 
