@@ -301,8 +301,8 @@ int main(int argc, char* argv[]) {
    printf("Finished addition on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
    printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
 
-   Print_matrix("The rotated image(CPU) is: ", h_B2, dimX, dimY, 9, 9);
-   Print_matrix("The rotated image(GPU) is: ", h_B, dimX, dimY, 9, 9);
+   Print_matrix("The rotated image(CPU) is: ", h_B2, dimX, dimY, 20, 9);
+   Print_matrix("The rotated image(GPU) is: ", h_B, dimX, dimY, 20, 9);
 
    /* Free device memory */
    cudaFree(d_A);
