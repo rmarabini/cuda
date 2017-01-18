@@ -30,10 +30,10 @@ __global__ void rotMatFunc(float matIn[],
 ///    int x = blockIdx.x * blockDim.x + threadIdx.x;
     const unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
     const unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
-    printf("x,y = %d %d, blockIdx.x,y= %d %d,  blockDim.x,y = %d %d, threadIdx.x,y= %d %d\n",
-            x,y,      blockIdx.x,blockIdx.y,      blockDim.x,blockDim.y,     threadIdx.x,threadIdx.y);
     if ( x >= dimX || y > dimY) 
          return;
+    printf("x,y = %d %d, blockIdx.x,y= %d %d,  blockDim.x,y = %d %d, threadIdx.x,y= %d %d\n",
+            x,y,      blockIdx.x,blockIdx.y,      blockDim.x,blockDim.y,     threadIdx.x,threadIdx.y);
     int indexOfMatrixOut = y + x * dimY;
     int  x0=dimX/2, y0=dimY/2;//this may be passed
 
@@ -56,9 +56,11 @@ __global__ void rotMatFunc(float matIn[],
         jIn >= 0 && 
         jIn < dimY) 
         {
-         printf("in=%d, out=%d v=%f\n",indexOfMatrixIn,indexOfMatrixOut, matIn[indexOfMatrixIn]);
             matOut[indexOfMatrixOut] = matIn[indexOfMatrixIn];
+         printf("in=%d, out=%d vI=%f vO=%f\n",indexOfMatrixIn,indexOfMatrixOut, 
+                 matIn[indexOfMatrixIn], matOut[indexOfMatrixOut]);
          }
+   
 }  /* Mat_add */
 
 
