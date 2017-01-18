@@ -188,10 +188,10 @@ void rotateCPU(float matIn[],
         float sy = (src_y-src_y0);
 
 
-        int idx_src00 = min(src_x0   + src_y0 * dimX,dimX*dimY-1.0f);
-        int idx_src10 = min(src_x1   + src_y0 * dimX,dimX*dimY-1.0f);
-        int idx_src01 = min(src_x0   + src_y1 * dimX,dimX*dimY-1.0f);
-        int idx_src11 = min(src_x1   + src_y1 * dimX,dimX*dimY-1.0f);
+        int idx_src00 = min(max(0.0f,src_x0   + src_y0 * dimX),dimX*dimY-1.0f);
+        int idx_src10 = min(max(0.0f,src_x1   + src_y0 * dimX),dimX*dimY-1.0f);
+        int idx_src01 = min(max(0.0f,src_x0   + src_y1 * dimX),dimX*dimY-1.0f);
+        int idx_src11 = min(max(0.0f,src_x1   + src_y1 * dimX),dimX*dimY-1.0f);
 
         matOut[idx]  = (1.0f-sx)*(1.0f-sy)*matIn[idx_src00];
         matOut[idx] += (     sx)*(1.0f-sy)*matIn[idx_src10];
@@ -204,8 +204,8 @@ void rotateCPU(float matIn[],
 }
 /* Host code */
 int main(int argc, char* argv[]) {
-   size_t dimX = 9;//mat size
-   size_t dimY = 9;
+   size_t dimX = 51;//mat size
+   size_t dimY = 51;
    size_t gridX = 9;//mat size
    size_t gridY = 9;
 
@@ -301,8 +301,8 @@ int main(int argc, char* argv[]) {
    printf("Finished addition on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
    printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
 
-   Print_matrix("The rotated image(CPU) is: ", h_B2, dimX, dimY, 9, 9);
-   Print_matrix("The rotated image(GPU) is: ", h_B, dimX, dimY, 9, 9);
+   Print_matrix("The rotated image(CPU) is: ", h_B2, dimX, dimY, 9, 51);
+   Print_matrix("The rotated image(GPU) is: ", h_B, dimX, dimY, 9, 51);
 
    /* Free device memory */
    cudaFree(d_A);
