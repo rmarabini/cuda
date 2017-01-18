@@ -43,7 +43,7 @@ __global__ void rotMatFunc(float matIn[],
    float dimXf=(float)dimX, dimYf=(float)dimY;
    xOut = (float)(x - x0)/dimXf;
    yOut = (float)(y - y0)/dimYf;
-   printf("x =%d y=%d xOut=%f yIn=%f\n",x, y, xOut, yOut);
+   printf("x =%d y=%d x0=%d dimXf=%f xOut=%f yIn=%f\n",x, y, x0, dimXf, xOut, yOut);
    xIn = rotMat[0] * xOut + rotMat[1] * yOut;
    yIn = rotMat[2] * xOut + rotMat[3] * yOut;
    printf("x =%d y=%d xIn=%f yIn=%f\n",x, y, xIn, yIn);
