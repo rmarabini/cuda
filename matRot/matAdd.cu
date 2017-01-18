@@ -30,7 +30,7 @@ __global__ void rotMatFunc(float matIn[],
 ///    int x = blockIdx.x * blockDim.x + threadIdx.x;
     int x = blockIdx.x * blockDim.x + threadIdx.x;
     int y = blockIdx.y * blockDim.y + threadIdx.y;
-    if ( x >= dimX || y > dimY) 
+    if ( x >= dimX || y >= dimY) 
          return;
     //printf("x,y = %d %d, blockIdx.x,y= %d %d,  blockDim.x,y = %d %d, threadIdx.x,y= %d %d\n",
     //        x,y,      blockIdx.x,blockIdx.y,      blockDim.x,blockDim.y,     threadIdx.x,threadIdx.y);
@@ -54,9 +54,9 @@ __global__ void rotMatFunc(float matIn[],
                 iIn < dimX && 
                 jIn >= 0 && 
                 jIn < dimY) 
-
+                {
                 matOut[x*dimY+y] = matIn[iIn*dimY+jIn];
-           
+                }
 
 /*
     int indexOfMatrixOut = y + x * dimY;
