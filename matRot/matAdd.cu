@@ -55,6 +55,7 @@ __global__ void rotMatFunc(float matIn[],
                 jIn >= 0 && 
                 jIn < dimY) 
                 {
+                printf("x=%d y=%d iIn=%d jIn=%d in=%d, out=%d\n",x, y, iIn, jIn, iIn*dimY+jIn,x*dimY+y);
                 matOut[x*dimY+y] = matIn[iIn*dimY+jIn];
                 }
 
