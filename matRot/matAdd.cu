@@ -34,6 +34,31 @@ __global__ void rotMatFunc(float matIn[],
          return;
     //printf("x,y = %d %d, blockIdx.x,y= %d %d,  blockDim.x,y = %d %d, threadIdx.x,y= %d %d\n",
     //        x,y,      blockIdx.x,blockIdx.y,      blockDim.x,blockDim.y,     threadIdx.x,threadIdx.y);
+
+   float xOut,yOut;
+   float xIn, yIn;
+   int iIn, jIn;
+   float dimXf=(float)dimX, dimYf=(float)dimY;
+   int  x0=dimX/2, y0=dimY/2;
+
+           xOut = (float)(x - x0)/dimXf;
+           yOut = (float)(y - y0)/dimYf;
+           
+           xIn = rotMat[0] * xOut + rotMat[1] * yOut;
+           yIn = rotMat[2] * xOut + rotMat[3] * yOut;
+           
+           iIn = int(xIn * dimXf + x0);
+           jIn = int(yIn * dimYf + y0);
+
+           if ( iIn >= 0 && 
+                iIn < dimX && 
+                jIn >= 0 && 
+                jIn < dimY) 
+
+                matOut[x*dimY+y] = matIn[iIn*dimY+jIn];
+           }
+
+/*
     int indexOfMatrixOut = y + x * dimY;
     int  x0=dimX/2, y0=dimY/2;//this may be passed
 
@@ -60,7 +85,7 @@ __global__ void rotMatFunc(float matIn[],
          printf("x=%d y=%d in=%d, out=%d vI=%f vO=%f\n",x, y, indexOfMatrixIn,indexOfMatrixOut, 
                  matIn[indexOfMatrixIn], matOut[indexOfMatrixOut]);
          }
-   
+*/   
 }  /* Mat_add */
 
 
