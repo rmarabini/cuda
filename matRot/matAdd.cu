@@ -28,8 +28,8 @@ __global__ void rotMatFunc(float matIn[],
                            float rotMat[]) {
 //    int y = blockIdx.y;
 ///    int x = blockIdx.x * blockDim.x + threadIdx.x;
-    const unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
-    const unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
+    const  int x = blockIdx.x * blockDim.x + threadIdx.x;
+    const  int y = blockIdx.y * blockDim.y + threadIdx.y;
     if ( x >= dimX || y > dimY) 
          return;
     printf("x,y = %d %d, blockIdx.x,y= %d %d,  blockDim.x,y = %d %d, threadIdx.x,y= %d %d\n",
@@ -43,7 +43,7 @@ __global__ void rotMatFunc(float matIn[],
    float dimXf=(float)dimX, dimYf=(float)dimY;
    xOut = (float)(x - x0)/dimXf;
    yOut = (float)(y - y0)/dimYf;
-   printf("x =%d y=%d x0=%d dimXf=%f xOut=%f yIn=%f\n",x, y, x0, dimXf, xOut, yOut);
+   printf("x=%d y=%d x0=%d dimXf=%f xOut=%f yOut=%f\n",x, y, x0, dimXf, xOut, yOut);
    xIn = rotMat[0] * xOut + rotMat[1] * yOut;
    yIn = rotMat[2] * xOut + rotMat[3] * yOut;
    printf("x =%d y=%d xIn=%f yIn=%f\n",x, y, xIn, yIn);
