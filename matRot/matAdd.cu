@@ -30,6 +30,10 @@ __global__ void rotMatFunc(float matIn[],
 ///    int x = blockIdx.x * blockDim.x + threadIdx.x;
     const unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
     const unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
+    printf("x = %d, blockIdx.x= %d,  blockDim.x = %d, threadIdx.x= %d",
+            x,      blockIdx.x,      blockDim.x,     threadIdx.x)
+    printf("y = %d, blockIdx.y= %d,  blockDim.y = %d, threadIdx.y= %d",
+            y,      blockIdx.y,      blockDim.y,     threadIdx.y)
     if ( x >= dimX || y > dimY) 
          return;
     int indexOfMatrixOut = y + x * dimY;
@@ -219,8 +223,8 @@ int main(int argc, char* argv[]) {
    /* which contains threadsPerBlock threads                        */
    
    dim3 block(threadsPerBlock, threadsPerBlock);
-   dim3 grid( (dimX+threadsPerBlock-1)/threadsPerBlock, 
-              (dimY+threadsPerBlock-1)/threadsPerBlock );
+   dim3 grid( (gridX+threadsPerBlock-1)/threadsPerBlock, 
+              (gridY+threadsPerBlock-1)/threadsPerBlock );
    cudaEventRecord(deviceStart, 0);
    rotMatFunc<<<grid, block>>>(d_A, d_B, dimX, dimY, d_rotMat);
 
