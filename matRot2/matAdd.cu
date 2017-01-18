@@ -38,19 +38,14 @@ __global__ void rotMatFunc(float matIn[],
    float xOut,yOut;
    float xIn, yIn;
    int iIn, jIn;
-//   float dimXf=(float)dimX, dimYf=(float)dimY;
    int  x0=dimX/2, y0=dimY/2;
 
-//           xOut = (float)(x - x0)/dimXf;
-//           yOut = (float)(y - y0)/dimYf;
            xOut = (float)(x - x0);
            yOut = (float)(y - y0);
            
            xIn = rotMat[0] * xOut + rotMat[1] * yOut;
            yIn = rotMat[2] * xOut + rotMat[3] * yOut;
            
-//           iIn = int(xIn * dimXf + x0);
-//           jIn = int(yIn * dimYf + y0);
            iIn = int(xIn + x0);
            jIn = int(yIn + y0);
 
@@ -63,34 +58,6 @@ __global__ void rotMatFunc(float matIn[],
                 matOut[x*dimY+y] = matIn[iIn*dimY+jIn];
                 }
 
-/*
-    int indexOfMatrixOut = y + x * dimY;
-    int  x0=dimX/2, y0=dimY/2;//this may be passed
-
-   float xOut,yOut;
-   float xIn, yIn;
-   int iIn, jIn;
-   float dimXf=(float)dimX, dimYf=(float)dimY;
-   xOut = (float)(x - x0)/dimXf;
-   yOut = (float)(y - y0)/dimYf;
-   //printf("x=%d y=%d x0=%d dimXf=%f xOut=%f yOut=%f\n",x, y, x0, dimXf, xOut, yOut);
-   xIn = rotMat[0] * xOut + rotMat[1] * yOut;
-   yIn = rotMat[2] * xOut + rotMat[3] * yOut;
-   //printf("x =%d y=%d xIn=%f yIn=%f\n",x, y, xIn, yIn);
-   iIn = int(xIn * dimXf + x0);
-   jIn = int(yIn * dimYf + y0);
-   int indexOfMatrixIn = jIn + iIn * dimY;
-
-   if ( iIn >= 0 && 
-        iIn < dimX && 
-        jIn >= 0 && 
-        jIn < dimY) 
-        {
-            matOut[indexOfMatrixOut] = matIn[indexOfMatrixIn];
-         printf("x=%d y=%d in=%d, out=%d vI=%f vO=%f\n",x, y, indexOfMatrixIn,indexOfMatrixOut, 
-                 matIn[indexOfMatrixIn], matOut[indexOfMatrixOut]);
-         }
-*/   
 }  /* Mat_add */
 
 
@@ -168,11 +135,13 @@ void rotateCPU(float matIn[],
     //// compute target address
     const unsigned int idx = x + y * dimX;
 
-    const int xA = (x - dimX/2 );
-    const int yA = (y - dimY/2 );
+    const int xA = (y - dimY/2 );
+    const int yA = (x - dimX/2 );
 
     const int xR = (int)floor( xA * rotMat[0] + yA * rotMat[1]);
     const int yR = (int)floor( xA * rotMat[2] + yA * rotMat[3]);
+  //         xIn = rotMat[0] * xOut + rotMat[1] * yOut;
+  //         yIn = rotMat[2] * xOut + rotMat[3] * yOut;
 
     float src_x = xR + dimX/2;
     float src_y = yR + dimY/2;
