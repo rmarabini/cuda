@@ -273,10 +273,8 @@ int main(int argc, char* argv[]) {
    /* which contains threadsPerBlock threads                        */
    
    dim3 block(threadsPerBlock, threadsPerBlock);
-   dim3 grid( dimX/threadsPerBlock + 1, 
-              dimY/threadsPerBlock + 1);
-//   dim3 grid( (gridX+threadsPerBlock-1)/threadsPerBlock, 
-//              (gridY+threadsPerBlock-1)/threadsPerBlock );
+   dim3 grid( (dimX+threadsPerBlock-1)/threadsPerBlock, 
+              (dimY+threadsPerBlock-1)/threadsPerBlock );
    cudaEventRecord(deviceStart, 0);
    rotMatFunc<<<grid, block>>>(d_A, d_B, dimX, dimY, d_rotMat);
 
