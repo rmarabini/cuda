@@ -204,8 +204,8 @@ void rotateCPU(float matIn[],
 }
 /* Host code */
 int main(int argc, char* argv[]) {
-   size_t dimX = 51;//mat size
-   size_t dimY = 51;
+   size_t dimX = 5100;//mat size
+   size_t dimY = 5100;
    size_t gridX = 9;//mat size
    size_t gridY = 9;
 
