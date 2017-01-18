@@ -177,7 +177,7 @@ void rotateCPU(float matIn[],
     float src_x = xR + dimX/2;
     float src_y = yR + dimY/2;
 
-     printf("x %d y %d src_x=%f src_y=%f", x,y,src_x,src_y);
+     //printf("x %d y %d src_x=%f src_y=%f", x,y,src_x,src_y);
 
      if ( src_x >= 0.0f && src_x < dimX && src_y >= 0.0f && src_y < dimY) {
         // BI - LINEAR INTERPOLATION
@@ -240,10 +240,10 @@ int main(int argc, char* argv[]) {
    Fill_matrix(h_A, dimX, dimY);
 
    //init rot Matrix
-   h_rotMat[0] = 0.f;
-   h_rotMat[1] = -1.f;
-   //h_rotMat[0] = 0.936f;
-   //h_rotMat[1] = 0.352f;
+   //h_rotMat[0] = 0.f;
+   //h_rotMat[1] = -1.f;
+   h_rotMat[0] = 0.936f;
+   h_rotMat[1] = 0.352f;
    h_rotMat[2] = -h_rotMat[1];
    h_rotMat[3] =  h_rotMat[0];
 
