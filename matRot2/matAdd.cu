@@ -48,9 +48,9 @@ __global__ void rotMatFunc(float matIn[],
      if ( src_x >= 0.0f && src_x < dimX && src_y >= 0.0f && src_y < dimY) {
         // BI - LINEAR INTERPOLATION
         float src_x0 = (float)(int)(src_x);
-        float src_x1 = (src_x0+1); //if(src_x1 == dimX) src_x1=src_x0;
+        float src_x1 = (src_x0+1); if(src_x1 == dimX) src_x1=src_x0;
         float src_y0 = (float)(int)(src_y);
-        float src_y1 = (src_y0+1); //if(src_y1 == dimY) src_y1=src_y0;
+        float src_y1 = (src_y0+1); if(src_y1 == dimY) src_y1=src_y0;
 
         float sx = (src_x-src_x0);
         float sy = (src_y-src_y0);
@@ -180,9 +180,9 @@ void rotateCPU(float matIn[],
      if ( src_x >= 0.0f && src_x < dimX && src_y >= 0.0f && src_y < dimY) {
         // BI - LINEAR INTERPOLATION
         float src_x0 = (float)(int)(src_x);
-        float src_x1 = (src_x0+1); //if(src_x1 == dimX) src_x1=src_x0;
+        float src_x1 = (src_x0+1); if(src_x1 == dimX) src_x1=src_x0;
         float src_y0 = (float)(int)(src_y);
-        float src_y1 = (src_y0+1); //if(src_y1 == dimY) src_y1=src_y0;
+        float src_y1 = (src_y0+1); if(src_y1 == dimY) src_y1=src_y0;
 
         float sx = (src_x-src_x0);
         float sy = (src_y-src_y0);
