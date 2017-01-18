@@ -28,12 +28,10 @@ __global__ void rotMatFunc(float matIn[],
                            float rotMat[]) {
 //    int y = blockIdx.y;
 //    int x = blockIdx.x * blockDim.x + threadIdx.x;
-    int y = blockIdx.y * blockDim.x + threadIdx.x;
-    int x = blockIdx.x ;
-   if ( x >= dimX || y > dimY) 
-        return;
-//    const unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
-//    const unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
+    const unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
+    const unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
+    if ( x >= dimX || y > dimY) 
+         return;
     int indexOfMatrixOut = y + x * dimY;
     int  x0=dimX/2, y0=dimY/2;//this may be passed
 
@@ -152,13 +150,14 @@ void rotateCPU(float matIn[],
 
 }
 /* Host code */
-#define _dimY 9
 int main(int argc, char* argv[]) {
    size_t dimX = 9;//mat size
-   size_t dimY = _dimY;
+   size_t dimY = 9;
+   size_t gridX = 9;//mat size
+   size_t gridY = 9;
 
    // variables for threads per block, number of blocks.
-   int threadsPerBlock = 9;//, blocksInGrid = 0;
+   int threadsPerBlock = 32;//, blocksInGrid = 0;
    //threadsPerBlock = min(_dimY, _dimY);
    //create cuda event variables
    cudaEvent_t hostStart, hostStop, deviceStart, deviceStop;
@@ -219,8 +218,9 @@ int main(int argc, char* argv[]) {
    /* Invoke kernel using dimX * dimY thread blocks, each of    */
    /* which contains threadsPerBlock threads                        */
    
-   dim3 block(threadsPerBlock);
-   dim3 grid( dimX, (dimY+threadsPerBlock-1)/threadsPerBlock );
+   dim3 block(threadsPerBlock, threadsPerBlock);
+   dim3 grid( (dimX+threadsPerBlock-1)/threadsPerBlock, 
+              (dimY+threadsPerBlock-1)/threadsPerBlock );
    cudaEventRecord(deviceStart, 0);
    rotMatFunc<<<grid, block>>>(d_A, d_B, dimX, dimY, d_rotMat);
 
