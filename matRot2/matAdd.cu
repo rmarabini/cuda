@@ -135,10 +135,10 @@ void rotateCPU(float matIn[],
     //// compute target address
     const unsigned int idx = x + y * dimX;
 
-    const int xA = (y - dimY/2 );
-    const int yA = (x - dimX/2 );
+    const int xA = (x - dimX/2 );
+    const int yA = (y - dimY/2 );
 
-    const int xR = (int)floor( xA * rotMat[0] + yA * rotMat[1]);
+    const int xR = (int)floor( xA * rotMat[0] - yA * rotMat[1]);
     const int yR = (int)floor( xA * rotMat[2] + yA * rotMat[3]);
   //         xIn = rotMat[0] * xOut + rotMat[1] * yOut;
   //         yIn = rotMat[2] * xOut + rotMat[3] * yOut;
