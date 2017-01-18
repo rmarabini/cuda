@@ -245,6 +245,7 @@ int main(int argc, char* argv[]) {
 
    /* Copy matrices from host memory to device memory */
    cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
+   cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
    cudaMemcpy(d_rotMat, h_rotMat, 4*sizeof(float), cudaMemcpyHostToDevice);
 
    //create a proper grid block using dim3
