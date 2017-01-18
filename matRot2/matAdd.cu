@@ -121,39 +121,26 @@ void rotateCPU(float matIn[],
                float matOut[], int dimX, int dimY,
                float rotMat[])
 {
-   //float fX0,fY0;
    int  x0=dimX/2, y0=dimY/2;
-
-   //fX0 = (float)iX0;
-   //fY0 = (float)iY0;
-//   float xOut,yOut;
-//   float xIn, yIn;
-//   int iIn, jIn;
-//   float dimXf=(float)dimX, dimYf=(float)dimY;
    for(int x = 0 ; x < dimX; ++x)
        for(int y = 0 ; y < dimY; ++y){
     //// compute target address
     const unsigned int idx = x + y * dimX;
 
-    const int xA = (x - dimX/2 );
-    const int yA = (y - dimY/2 );
+    const int xA = (x - x0 );
+    const int yA = (y - y0 );
 
     const float xR = ( xA * rotMat[0] - yA * rotMat[1]);
     const float yR = ( -xA * rotMat[2] + yA * rotMat[3]);
-  //         xIn = rotMat[0] * xOut + rotMat[1] * yOut;
-  //         yIn = rotMat[2] * xOut + rotMat[3] * yOut;
-
-    float src_x = xR + dimX/2;
-    float src_y = yR + dimY/2;
-
-     //printf("x %d y %d src_x=%f src_y=%f", x,y,src_x,src_y);
+    float src_x = xR + x0;
+    float src_y = yR + y0;
 
      if ( src_x >= 0.0f && src_x < dimX && src_y >= 0.0f && src_y < dimY) {
         // BI - LINEAR INTERPOLATION
         float src_x0 = (float)(int)(src_x);
-        float src_x1 = (src_x0+1);
+        float src_x1 = (src_x0+1); if(src_x1 == dimX) src_x1=src_x0;
         float src_y0 = (float)(int)(src_y);
-        float src_y1 = (src_y0+1);
+        float src_y1 = (src_y0+1); if(src_y1 == dimY) src_y1=src_y0;
 
         float sx = (src_x-src_x0);
         float sy = (src_y-src_y0);
