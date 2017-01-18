@@ -177,14 +177,11 @@ void rotateCPU(float matIn[],
 int main(int argc, char* argv[]) {
    size_t dimX = 9;//mat size
    size_t dimY = 9;
-   size_t gridX = 9;//mat size
-   size_t gridY = 9;
 
    // variables for threads per block, number of blocks.
    int threadsPerBlockX = 32;//, blocksInGrid = 0;   
    int threadsPerBlockY = 32;//, blocksInGrid = 0;
-   int threadsPerBlock = threadsPerBlockX * threadsPerBlockY;
-   int gridX=32, gridY=32
+
    //threadsPerBlock = min(_dimY, _dimY);
    //create cuda event variables
    cudaEvent_t hostStart, hostStop, deviceStart, deviceStop;
