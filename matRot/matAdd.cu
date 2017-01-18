@@ -30,9 +30,9 @@ __global__ void rotMatFunc(float matIn[],
 ///    int x = blockIdx.x * blockDim.x + threadIdx.x;
     const unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
     const unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
-    printf("x = %d, blockIdx.x= %d,  blockDim.x = %d, threadIdx.x= %d",
+    printf("x = %d, blockIdx.x= %d,  blockDim.x = %d, threadIdx.x= %d\n",
             x,      blockIdx.x,      blockDim.x,     threadIdx.x);
-    printf("y = %d, blockIdx.y= %d,  blockDim.y = %d, threadIdx.y= %d",
+    printf("y = %d, blockIdx.y= %d,  blockDim.y = %d, threadIdx.y= %d\n",
             y,      blockIdx.y,      blockDim.y,     threadIdx.y);
     if ( x >= dimX || y > dimY) 
          return;
