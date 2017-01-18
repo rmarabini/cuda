@@ -56,10 +56,10 @@ __global__ void rotMatFunc(float matIn[],
         float sy = (src_y-src_y0);
 
 
-        int idx_src00 = min(src_x0   + src_y0 * dimX),dimX*dimY-1.0f);
-        int idx_src10 = min(src_x1   + src_y0 * dimX),dimX*dimY-1.0f);
-        int idx_src01 = min(src_x0   + src_y1 * dimX),dimX*dimY-1.0f);
-        int idx_src11 = min(src_x1   + src_y1 * dimX),dimX*dimY-1.0f);
+        int idx_src00 = min(src_x0   + src_y0 * dimX,dimX*dimY-1.0f);
+        int idx_src10 = min(src_x1   + src_y0 * dimX,dimX*dimY-1.0f);
+        int idx_src01 = min(src_x0   + src_y1 * dimX,dimX*dimY-1.0f);
+        int idx_src11 = min(src_x1   + src_y1 * dimX,dimX*dimY-1.0f);
 
         matOut[idx]  = (1.0f-sx)*(1.0f-sy)*matIn[idx_src00];
         matOut[idx] += (     sx)*(1.0f-sy)*matIn[idx_src10];
