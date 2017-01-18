@@ -171,13 +171,13 @@ void rotateCPU(float matIn[],
     const int xA = (x - dimX/2 );
     const int yA = (y - dimY/2 );
 
-    const int xR = (int)floor( xA * rotMat[0] - yA * rotMat[1]);
+    const int xR = (int)floor( xA * rotMat[0] + yA * rotMat[1]);
     const int yR = (int)floor( xA * rotMat[2] + yA * rotMat[3]);
 
     float src_x = xR + dimX/2;
     float src_y = yR + dimY/2;
 
-
+     printf("x %d y %d src_x=%f src_y=%f", x,y,src_x,src_y);
 
      if ( src_x >= 0.0f && src_x < dimX && src_y >= 0.0f && src_y < dimY) {
         // BI - LINEAR INTERPOLATION
