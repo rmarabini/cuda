@@ -56,7 +56,7 @@ __global__ void rotMatFunc(float matIn[],
                 jIn < dimY) 
 
                 matOut[x*dimY+y] = matIn[iIn*dimY+jIn];
-           }
+           
 
 /*
     int indexOfMatrixOut = y + x * dimY;
