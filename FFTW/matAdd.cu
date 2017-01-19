@@ -121,11 +121,6 @@ int main(int argc, char* argv[]) {
    size_t dimX = 3;//mat size
    size_t dimY = 3;
 
-   // variables for threads per block, number of blocks.
-   int threadsPerBlockX = 32;//, blocksInGrid = 0;   
-   int threadsPerBlockY = 32;//, blocksInGrid = 0;
-
-   //threadsPerBlock = min(_dimY, _dimY);
    //create cuda event variables
    cudaEvent_t hostStart, hostStop, deviceStart, deviceStop;
    float timeDifferenceOnHost, timeDifferenceOnDevice;
