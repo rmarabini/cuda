@@ -116,6 +116,7 @@ void fftwCPU(float matIn[],
     fftwf_plan p2d;
     p2d = fftwf_plan_dft_r2c_2d(dimX, dimY, matIn,matOut,FFTW_ESTIMATE );
     fftwf_execute(p2d);
+    /*
     fftwf_plan p2d2;
     p2d2 = fftwf_plan_dft_c2r_2d(dimX, dimY, matOut,matIn,FFTW_ESTIMATE );
     fftwf_execute(p2d2);
@@ -128,7 +129,7 @@ void fftwCPU(float matIn[],
            matIn[5],
            matIn[6],
            matIn[7],
-           matIn[8]);
+           matIn[8]);*/
 }
 
 /* Host code */
@@ -212,7 +213,7 @@ int main(int argc, char* argv[]) {
          printf("Kernel logic wrong!\n");
 
    cufftHandle planI;
-   cufftPlan2d(&planI, dimX, dimY/2+1, CUFFT_C2R);
+   cufftPlan2d(&planI, dimX, dimY, CUFFT_C2R);
    cufftExecC2R(planI, d_B, d_A);
    checkError(cudaMemcpy(h_A2, d_A, size, cudaMemcpyDeviceToHost),
 "Matrix A Copy from device to Host");
