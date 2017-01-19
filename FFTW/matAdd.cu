@@ -73,6 +73,18 @@ void Print_matrix_complex(const char title[], fftwf_complex A[], int dimY, int d
    }  
 }  /* Print_matrix */
 
+void Print_matrix_cu_complex(const char title[], cufftComplex A[], int dimY, int dimX, int m, int n) {
+   int i, j;
+   printf("%s\n", title);
+   for (i = 0; i < m; i++) {
+      for (j = 0; j < n; j++){
+           //c=A[i*dimX+j];
+         printf("%.2f%+.2fi ", A[i*dimX+j].x, A[i*dimX+j].y);
+               }
+      printf("\n");
+   }  
+}  /* Print_matrix */
+
 void checkError(cudaError_t error, const char function[])
 {
 
@@ -187,7 +199,7 @@ int main(int argc, char* argv[]) {
       printf("GPUtime: %5.5f\n", (float)timeDifferenceOnDevice);
 
       Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimX, dimY, 3, 3);
-      Print_matrix_complex("The fft image(GPU) is: ", h_B, dimX, dimY, 3, 3);
+      Print_matrix_cu_complex("The fft image(GPU) is: ", h_B, dimX, dimY, 3, 3);
       
    /* Free device memory */
    cudaFree(d_A);
