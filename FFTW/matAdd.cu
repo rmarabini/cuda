@@ -141,7 +141,7 @@ int main(int argc, char* argv[]) {
   
    matrixSize = dimX*dimY;
    size = matrixSize*sizeof(float);
-   matrixFourierSize = dimY*(dimX/2+1);
+   int matrixFourierSize = dimY*(dimX/2+1);
    int sizeFourier = matrixFourierSize*sizeof(fftwf_complex);
    //typedef float cufftReal; is a single-precision, floating-point real data type. 
    h_A = (float*) calloc(size,1);
