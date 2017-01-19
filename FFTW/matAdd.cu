@@ -132,7 +132,7 @@ int main(int argc, char* argv[]) {
    cudaEventCreate(&deviceStart);
    cudaEventCreate(&deviceStop);
 
-   float *h_A, h_A2;//PC
+   float *h_A, *h_A2;//PC
    cufftComplex *d_B;//GPU
    cufftReal *d_A;
    size_t size, matrixSize;
