@@ -117,18 +117,18 @@ void fftwCPU(float matIn[],
     p2d = fftwf_plan_dft_r2c_2d(dimX, dimY, matIn,matOut,FFTW_ESTIMATE );
     fftwf_execute(p2d);
     fftwf_plan p2d2;
-    p2d2 = fftwf_plan_dft_c2r_2d(dimX, dimY/2+1, matOut,matOIn,FFTW_ESTIMATE );
+    p2d2 = fftwf_plan_dft_c2r_2d(dimX, dimY/2+1, matOut,matIn,FFTW_ESTIMATE );
     fftwf_execute(p2d2);
     printf("%f %f %f %f %f %f %f %f %f",
-           matOIn[0],
-           matOIn[1],
-           matOIn[2],
-           matOIn[3],
-           matOIn[4],
-           matOIn[5],
-           matOIn[6],
-           matOIn[7],
-           matOIn[8]);
+           matIn[0],
+           matIn[1],
+           matIn[2],
+           matIn[3],
+           matIn[4],
+           matIn[5],
+           matIn[6],
+           matIn[7],
+           matIn[8]);
 }
 
 /* Host code */
