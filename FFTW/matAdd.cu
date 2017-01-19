@@ -29,8 +29,7 @@
 __global__ void fftwFunc(float matIn[], 
                            float matOut[], 
                            int dimX, 
-                           int dimY, 
-                           float rotMat[]) {
+                           int dimY) {
 //    int y = blockIdx.y;
 ///    int x = blockIdx.x * blockDim.x + threadIdx.x;
     int x = blockIdx.x * blockDim.x + threadIdx.x;
@@ -183,13 +182,14 @@ int main(int argc, char* argv[]) {
    matrixSize = dimX*dimY;
    size = matrixSize*sizeof(float);
    int sizeFourier = dimY*(dimX/2+1)*sizeof(fftwf_complex);
+   //typedef float cufftReal; is a single-precision, floating-point real data type. 
    h_A = (float*) calloc(size,1);
-   fftwf_complex * h_B  =(fftwf_complex *) malloc(sizeFourier);
+   cufftComplex  * h_B  =(cufftComplex *) malloc(sizeFourier);
    fftwf_complex * h_B2 =(fftwf_complex *) malloc(sizeFourier);
 
    /* Allocate matrices in device memory */
    cudaMalloc(&d_A, size);
-   cudaMalloc(&d_B, size*2);
+   cudaMalloc(&d_B, sizeFourier);
 
    Fill_matrix(h_A, dimX, dimY);
    Print_matrix("original matrix is: ", h_A, dimX, dimY, 3, 3);
@@ -197,28 +197,24 @@ int main(int argc, char* argv[]) {
       cudaEventRecord(hostStart, 0);
       //rotate matrix using CPU
       //memset(h_B2, 0, size);
-      fftwCPU(h_A ,h_B2, dimX, dimY);
+      fftwCPU(h_A ,h_B, dimX, dimY);
       Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimY, dimX/2+1, 3, 2);
-return;
+
       cudaEventRecord(hostStop, 0);
       cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
       printf("Matrix fft over. Time taken on CPU: %5.5f\n",     
           timeDifferenceOnHost);
+
+      //Create Plan
+      cufftHandle plan;
+      cufftPlan2d(&plan, dimX, dimY, CUFFT_R2C);
 
       /* Copy matrices from host memory to device memory */
 //      memset(h_B, 0, size);
       cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
       cudaMemcpy(d_B, h_B, sizeFourier, cudaMemcpyHostToDevice);
 
-
-      /* Invoke kernel using dimX * dimY thread blocks, each of    */
-      /* which contains threadsPerBlock threads                        */
-      dim3 block(threadsPerBlockX, threadsPerBlockY);   
-      dim3 grid;
-      grid.x = (dimX + block.x - 1)/block.x;
-      grid.y = (dimY + block.y - 1)/block.y;
-      cudaEventRecord(deviceStart, 0);
-      //////////////fftwFunc<<<grid, block>>>(d_A, d_B, dimX, dimY, d_rotMat);
+      cufftExecR2C(plan, d_A, d_B);
       cudaError_t code=cudaGetLastError();
       if (code)
          printf("error=%s",cudaGetErrorString(code));
@@ -231,17 +227,18 @@ return;
 
       /* Copy result from device memory to host memory */
       checkError(cudaMemcpy(h_B, d_B, size, cudaMemcpyDeviceToHost), "Matrix B Copy from device to Host");
+/*
       if(checkIfMatricesEqual(h_B, h_B2, matrixSize))
           printf("Kernels correct!\n");
       else
          printf("Kernel logic wrong!\n");
-	
+*/	
       printf("Finished fft on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
       printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
       printf("GPUtime: %5.5f\n", (float)timeDifferenceOnDevice);
 
       Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimX, dimY, 3, 3);
-      //Print_matrix("The fft image(GPU) is: ", h_B, dimX, dimY, 9, 9);
+      Print_matrix("The fft image(GPU) is: ", h_B, dimX, dimY, 3, 3);
       
    /* Free device memory */
    cudaFree(d_A);
