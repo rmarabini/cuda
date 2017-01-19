@@ -233,8 +233,8 @@ int main(int argc, char* argv[]) {
       printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
       printf("GPUtime: %5.5f\n", (float)timeDifferenceOnDevice);
 
-      Print_matrix("The fft image(CPU) is: ", h_B2, dimX, dimY, 9, 9);
-      Print_matrix("The fft image(GPU) is: ", h_B, dimX, dimY, 9, 9);
+      //Print_matrix("The fft image(CPU) is: ", h_B2, dimX, dimY, 9, 9);
+      //Print_matrix("The fft image(GPU) is: ", h_B, dimX, dimY, 9, 9);
       }
    /* Free device memory */
    cudaFree(d_A);
