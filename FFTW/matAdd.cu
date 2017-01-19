@@ -201,7 +201,7 @@ int main(int argc, char* argv[]) {
    cufftHandle planI;
    cufftPlan2d(&planI, dimX, dimY, CUFFT_C2R);
    cufftExecC2R(plan, d_B, d_A);
-   checkError(cudaMemcpy(h_A, d_A2, sizeFourier, cudaMemcpyDeviceToHost),
+   checkError(cudaMemcpy(d_A, h_A2, sizeFourier, cudaMemcpyDeviceToHost),
 "Matrix A Copy from device to Host");
       printf("Finished fft on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
       printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
@@ -209,8 +209,7 @@ int main(int argc, char* argv[]) {
 
       Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimY, dimX/2+1, 3, 2);
       Print_matrix_cu_complex("The fft image(GPU) is: ", h_B, dimY, dimX/2+1, 3, 2);
-      Print_matrix_cu_complex("The fft image(GPU) is: ", h_A2, dimY, dimX/2+1, 3, 2);
-//Print_matrix_cu_complex("The fft image(GPU) is: ", h_B, dimX, dimY, 3, 3);
+   Print_matrix("original matrix is: ", h_A2, dimX, dimY, 3, 3);//Print_matrix_cu_complex("The fft image(GPU) is: ", h_B, dimX, dimY, 3, 3);
       
    /* Free device memory */
    cudaFree(d_A);
