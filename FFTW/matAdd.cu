@@ -128,7 +128,7 @@ void fftwCPU(float matIn[],
            matOIn[5],
            matOIn[6],
            matOIn[7],
-           matOIn[8])
+           matOIn[8]);
 }
 
 /* Host code */
