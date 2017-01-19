@@ -122,7 +122,7 @@ void checkError(cudaError_t error, const char function[])
         }
 }
 
-bool checkIfMatricesEqual(fftw_complex * mat1, fftw_complex * mat2, float matSize)
+bool checkIfMatricesEqual(fftwf_complex * mat1, fftwf_complex * mat2, float matSize)
 {
     int i = 0;
     for( ; i < matSize; i++)
@@ -135,7 +135,7 @@ bool checkIfMatricesEqual(fftw_complex * mat1, fftw_complex * mat2, float matSiz
     return true;
 }
 void fftwCPU(float matIn[], 
-               fftw_complex matOut[], int dimX, int dimY)
+               fftwf_complex matOut[], int dimX, int dimY)
 {
 //double * image=(double *) malloc(640*480*sizeof(double));
 //fftw_complex * out2d=(fftw_complex *)
@@ -178,8 +178,8 @@ int main(int argc, char* argv[]) {
    size = matrixSize*sizeof(float);
 
    h_A = (float*) calloc(size,1);
-   fftw_complex * h_B=(fftw_complex *) malloc(size);
-   fftw_complex * h_B2=(fftw_complex *) malloc(size);
+   fftwf_complex * h_B=(fftw_complex *) malloc(size);
+   fftwf_complex * h_B2=(fftw_complex *) malloc(size);
 
    /* Allocate matrices in device memory */
    cudaMalloc(&d_A, size);
