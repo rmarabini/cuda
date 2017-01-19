@@ -122,7 +122,8 @@ int main(int argc, char* argv[]) {
    cudaEventCreate(&deviceStop);
 
    float *h_A;//PC
-   float *d_A, *d_B;//GPU
+   float *d_B;//GPU
+   cufftReal *d_A;
    size_t size, matrixSize;
 
    /* Get size of matrices */
