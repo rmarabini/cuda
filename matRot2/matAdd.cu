@@ -177,8 +177,9 @@ void rotateCPU(float matIn[],
 int main(int argc, char* argv[]) {
    size_t dimX = 9;//mat size
    size_t dimY = 9;
+   int numberRot;
    printf("introduce image size and press enter: ");
-   scanf ("%d",&dimX); dimY=dimX; 
+   scanf ("%d",&numberRot); //dimY=dimX; 
 
    // variables for threads per block, number of blocks.
    int threadsPerBlockX = 32;//, blocksInGrid = 0;   
@@ -208,75 +209,76 @@ int main(int argc, char* argv[]) {
    h_B2 = (float*) calloc(size,1);
    h_rotMat = (float*) calloc(4*sizeof(float),1);
 
-   Fill_matrix(h_A, dimX, dimY);
-
-   //init rot Matrix
-   //h_rotMat[0] = 0.f;
-   //h_rotMat[1] = -1.f;
-   h_rotMat[0] = 0.936f;
-   h_rotMat[1] = 0.352f;
-   h_rotMat[2] = -h_rotMat[1];
-   h_rotMat[3] =  h_rotMat[0];
-
-   Print_matrix("A =", h_A, dimX, dimY, 9, 9);
-   printf("Rotating matrices on CPU...\n");
-   cudaEventRecord(hostStart, 0);
-   //rotate matrix using CPU
-   rotateCPU(h_A ,h_B2, dimX, dimY, h_rotMat);
-   //////////
-   cudaEventRecord(hostStop, 0);
-   cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
-   printf("Matrix rotation over. Time taken on CPU: %5.5f\n",     
-          timeDifferenceOnHost);
-   Print_matrix("B2(CPU) =", h_B2, dimX, dimY, 9, 9);
-
    /* Allocate matrices in device memory */
    cudaMalloc(&d_A, size);
    cudaMalloc(&d_B, size);
    cudaMalloc(&d_rotMat, 4*sizeof(float));
 
-   /* Copy matrices from host memory to device memory */
-   cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
-   cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
-   cudaMemcpy(d_rotMat, h_rotMat, 4*sizeof(float), cudaMemcpyHostToDevice);
+   Fill_matrix(h_A, dimX, dimY);
+   float initAngle=0;
+   float lastAngle=90;
+   float stepSize= (lastAngle - initAngle )/ numberRot;
+   Print_matrix("A =", h_A, dimX, dimY, 9, 9);
+   for (float angle=initAngle; angle <=lastAngle; angle+=stepSize){
+       //init rot Matrix
+       h_rotMat[0] = cosf(angle);
+       h_rotMat[1] = sinf(angle);
+       h_rotMat[2] = -h_rotMat[1];
+       h_rotMat[3] =  h_rotMat[0];
 
-   //create a proper grid block using dim3
+      printf("Rotating matrices on CPU...\n");
+      cudaEventRecord(hostStart, 0);
+      //rotate matrix using CPU
+      memset(h_B2, 0, size);
+      rotateCPU(h_A ,h_B2, dimX, dimY, h_rotMat);
+      cudaEventRecord(hostStop, 0);
+      cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
+      printf("Matrix rotation over. Time taken on CPU: %5.5f\n",     
+          timeDifferenceOnHost);
+      if (angle==initAngle)
+          Print_matrix("B2(CPU) =", h_B2, dimX, dimY, 9, 9);
 
-   /* Invoke kernel using dimX * dimY thread blocks, each of    */
-   /* which contains threadsPerBlock threads                        */
-   dim3 block(threadsPerBlockX, threadsPerBlockY);   
-   dim3 grid;
-   grid.x = (dimX + block.x - 1)/block.x;
-   grid.y = (dimY + block.y - 1)/block.y;
-   cudaEventRecord(deviceStart, 0);
-   rotMatFunc<<<grid, block>>>(d_A, d_B, dimX, dimY, d_rotMat);
+      /* Copy matrices from host memory to device memory */
+      memset(h_B, 0, size);
+      cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
+      cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
+      cudaMemcpy(d_rotMat, h_rotMat, 4*sizeof(float), cudaMemcpyHostToDevice);
 
-   cudaError_t code=cudaGetLastError();
-   if (code)
-       printf("error=%s",cudaGetErrorString(code));
-   else
-       printf("code=%d",code);
-   cudaDeviceSynchronize();  
-   cudaEventRecord(deviceStop, 0);
+      /* Invoke kernel using dimX * dimY thread blocks, each of    */
+      /* which contains threadsPerBlock threads                        */
+      dim3 block(threadsPerBlockX, threadsPerBlockY);   
+      dim3 grid;
+      grid.x = (dimX + block.x - 1)/block.x;
+      grid.y = (dimY + block.y - 1)/block.y;
+      cudaEventRecord(deviceStart, 0);
+      rotMatFunc<<<grid, block>>>(d_A, d_B, dimX, dimY, d_rotMat);
+      cudaError_t code=cudaGetLastError();
+      if (code)
+         printf("error=%s",cudaGetErrorString(code));
+      else
+         printf("code=%d",code);
+      cudaDeviceSynchronize();  
+      cudaEventRecord(deviceStop, 0);
 
-   /* Wait for the kernel to complete */
-   cudaThreadSynchronize();
-   cudaEventElapsedTime(&timeDifferenceOnDevice, deviceStart, deviceStop);
+      /* Wait for the kernel to complete */
+      cudaThreadSynchronize();
+      cudaEventElapsedTime(&timeDifferenceOnDevice, deviceStart, deviceStop);
 
-   /* Copy result from device memory to host memory */
-   checkError(cudaMemcpy(h_B, d_B, size, cudaMemcpyDeviceToHost), "Matrix B Copy from device to Host");
+      /* Copy result from device memory to host memory */
+      checkError(cudaMemcpy(h_B, d_B, size, cudaMemcpyDeviceToHost), "Matrix B Copy from device to Host");
 	
-   if(checkIfMatricesEqual(h_B, h_B2, matrixSize))
-      printf("Kernels correct!\n");
-   else
-      printf("Kernel logic wrong!\n");
+      if(checkIfMatricesEqual(h_B, h_B2, matrixSize))
+          printf("Kernels correct!\n");
+      else
+         printf("Kernel logic wrong!\n");
 	
-   printf("Finished addition on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
-   printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
+      printf("Finished addition on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
+      printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
+      printf("GPUtime: %5.5f\n", (float)timeDifferenceOnDevice);
 
-   Print_matrix("The rotated image(CPU) is: ", h_B2, dimX, dimY, 9, 9);
-   Print_matrix("The rotated image(GPU) is: ", h_B, dimX, dimY, 9, 9);
-
+      Print_matrix("The rotated image(CPU) is: ", h_B2, dimX, dimY, 9, 9);
+      Print_matrix("The rotated image(GPU) is: ", h_B, dimX, dimY, 9, 9);
+      }
    /* Free device memory */
    cudaFree(d_A);
    cudaFree(d_B);
