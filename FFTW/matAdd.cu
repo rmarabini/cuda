@@ -102,10 +102,10 @@ bool checkIfMatricesEqual(cufftComplex * mat1, fftwf_complex * mat2, float matSi
     int i = 0;
     for( ; i < matSize; i++)
        if( (fabs(mat1[i].x - mat2[i][0]) + 
-            fabs(mat1[i].y - mat2[i][1]) ) < 0.01 
+            fabs(mat1[i].y - mat2[i][1]) ) > 0.01 
          ){
            printf("values different for i: %d\n", i);
-		   printf("mat1[i] = %d, mat2[i] = %d\n", mat1[i], mat2[i]);		   
+		   printf("mat1[i] = %f, mat2[i] = %f\n", mat1[i].x, mat2[i][0]);		   
 		   return false;
 	   }
 
