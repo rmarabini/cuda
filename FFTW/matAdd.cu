@@ -155,7 +155,7 @@ int main(int argc, char* argv[]) {
 
    Fill_matrix(h_A, dimX, dimY);
 
-    h_A[0]=1.f; h_A[1]=0.f; h_A[2]=0.f; h_A[3]=0.f; 
+    h_A[0]=1.f; h_A[1]=1.f; h_A[2]=0.f; h_A[3]=0.f; 
     h_A[4]=1.f; h_A[5]=0.f; h_A[6]=0.f; h_A[7]=0.f; 
     h_A[8]=1.f; //h_A[9]=8.f; h_A[10]=7.f; h_A[11]=2.f;
 
