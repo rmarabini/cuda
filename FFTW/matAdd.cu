@@ -178,8 +178,8 @@ int main(int argc, char* argv[]) {
    size = matrixSize*sizeof(float);
 
    h_A = (float*) calloc(size,1);
-   fftwf_complex * h_B=(fftw_complex *) malloc(size);
-   fftwf_complex * h_B2=(fftw_complex *) malloc(size);
+   fftwf_complex * h_B=(fftwf_complex *) malloc(size);
+   fftwf_complex * h_B2=(fftwf_complex *) malloc(size);
 
    /* Allocate matrices in device memory */
    cudaMalloc(&d_A, size);
