@@ -199,9 +199,10 @@ int main(int argc, char* argv[]) {
       printf("fftw on CPU...\n");
       cudaEventRecord(hostStart, 0);
       //rotate matrix using CPU
-      memset(h_B2, 0, size);
+      //memset(h_B2, 0, size);
       fftwCPU(h_A ,h_B2, dimX, dimY);
-      
+      Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimX, dimY, 3, 3);
+      return;      
       cudaEventRecord(hostStop, 0);
       cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
       printf("Matrix fft over. Time taken on CPU: %5.5f\n",     
@@ -238,7 +239,7 @@ int main(int argc, char* argv[]) {
       else
          printf("Kernel logic wrong!\n");
 	
-      printf("Finished addition on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
+      printf("Finished fft on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
       printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
       printf("GPUtime: %5.5f\n", (float)timeDifferenceOnDevice);
 
