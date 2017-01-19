@@ -132,7 +132,7 @@ int main(int argc, char* argv[]) {
    cudaEventCreate(&deviceStart);
    cudaEventCreate(&deviceStop);
 
-   float *h_A;//PC
+   float *h_A, h_A2;//PC
    cufftComplex *d_B;//GPU
    cufftReal *d_A;
    size_t size, matrixSize;
@@ -145,6 +145,7 @@ int main(int argc, char* argv[]) {
    int sizeFourier = matrixFourierSize*sizeof(fftwf_complex);
    //typedef float cufftReal; is a single-precision, floating-point real data type. 
    h_A = (float*) calloc(size,1);
+   h_A2 = (float*) calloc(size,1);
    cufftComplex  * h_B  =(cufftComplex *) malloc(sizeFourier);
    fftwf_complex * h_B2 =(fftwf_complex *) malloc(sizeFourier);
 
@@ -197,12 +198,18 @@ int main(int argc, char* argv[]) {
       else
          printf("Kernel logic wrong!\n");
 
+   cufftHandle planI;
+   cufftPlan2d(&planI, dimX, dimY, CUFFT_C2R);
+   cufftExecC2R(plan, d_B, d_A);
+   checkError(cudaMemcpy(h_A, d_A2, sizeFourier, cudaMemcpyDeviceToHost),
+"Matrix A Copy from device to Host");
       printf("Finished fft on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
       printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
       printf("GPUtime: %5.5f\n", (float)timeDifferenceOnDevice);
 
       Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimY, dimX/2+1, 3, 2);
       Print_matrix_cu_complex("The fft image(GPU) is: ", h_B, dimY, dimX/2+1, 3, 2);
+      Print_matrix_cu_complex("The fft image(GPU) is: ", h_A2, dimY, dimX/2+1, 3, 2);
 //Print_matrix_cu_complex("The fft image(GPU) is: ", h_B, dimX, dimY, 3, 3);
       
    /* Free device memory */
