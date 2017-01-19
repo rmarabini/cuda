@@ -197,8 +197,6 @@ int main(int argc, char* argv[]) {
           printf("Kernels correct!\n");
       else
          printf("Kernel logic wrong!\n");
-   cufftHandle plan;
-   cufftPlan2d(&plan, dimX, dimY, CUFFT_R2C);
 
    cufftHandle planI;
    cufftPlan2d(&planI, dimX/2+1, dimY, CUFFT_C2R);
