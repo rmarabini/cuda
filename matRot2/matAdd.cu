@@ -178,7 +178,7 @@ int main(int argc, char* argv[]) {
    size_t dimX = 9;//mat size
    size_t dimY = 9;
    int numberRot;
-   printf("introduce image size and press enter: ");
+   printf("number of steps: ");
    scanf ("%d",&numberRot); //dimY=dimX; 
 
    // variables for threads per block, number of blocks.
@@ -255,8 +255,6 @@ int main(int argc, char* argv[]) {
       cudaError_t code=cudaGetLastError();
       if (code)
          printf("error=%s",cudaGetErrorString(code));
-      else
-         printf("code=%d",code);
       cudaDeviceSynchronize();  
       cudaEventRecord(deviceStop, 0);
 
