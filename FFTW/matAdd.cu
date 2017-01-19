@@ -122,7 +122,7 @@ void checkError(cudaError_t error, const char function[])
         }
 }
 
-bool checkIfMatricesEqual(float * mat1, float * mat2, float matSize)
+bool checkIfMatricesEqual(fftw_complex * mat1, fftw_complex * mat2, float matSize)
 {
     int i = 0;
     for( ; i < matSize; i++)
@@ -187,7 +187,7 @@ int main(int argc, char* argv[]) {
 
    Fill_matrix(h_A, dimX, dimY);
 
-      printf("fftw on CPU...with angle=%f\n",angle);
+      printf("fftw on CPU...\n");
       cudaEventRecord(hostStart, 0);
       //rotate matrix using CPU
       memset(h_B2, 0, size);
@@ -202,7 +202,7 @@ int main(int argc, char* argv[]) {
       memset(h_B, 0, size);
       cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
       cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
-      cudaMemcpy(d_rotMat, h_rotMat, 4*sizeof(float), cudaMemcpyHostToDevice);
+
 
       /* Invoke kernel using dimX * dimY thread blocks, each of    */
       /* which contains threadsPerBlock threads                        */
