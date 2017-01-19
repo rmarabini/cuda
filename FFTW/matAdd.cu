@@ -234,7 +234,7 @@ int main(int argc, char* argv[]) {
 
       //Print_matrix("The fft image(CPU) is: ", h_B2, dimX, dimY, 9, 9);
       //Print_matrix("The fft image(GPU) is: ", h_B, dimX, dimY, 9, 9);
-      }
+      
    /* Free device memory */
    cudaFree(d_A);
    cudaFree(d_B);
