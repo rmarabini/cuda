@@ -15,6 +15,8 @@
 //#include <helper_cuda.h>         // helper functions for CUDA error check
 //#include <helper_functions.h>    // includes cuda.h and cuda_runtime_api.h
 
+#include "fftw3f.h"
+
 
 /*---------------------------------------------------------------------
  * Kernel:   Mat_add
@@ -141,6 +143,7 @@ void fftwCPU(float matIn[],
 //fftw_complex * out2c=(fftw_complex *)
 //malloc(640*480*sizeof(fftw_complex));
 
+fftw_plan p2d;
 p2d = fftw_plan_dft_r2c_2d(dimX, dimY, matIn,matOut,FFTW_ESTIMATE );
 fftw_execute(p2d);
 }
