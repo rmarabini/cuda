@@ -151,42 +151,36 @@ int main(int argc, char* argv[]) {
 
    Fill_matrix(h_A, dimX, dimY);
    Print_matrix("original matrix is: ", h_A, dimX, dimY, 3, 3);
-      printf("fftw on CPU...\n");
-      cudaEventRecord(hostStart, 0);
-      //rotate matrix using CPU
-      //memset(h_B2, 0, size);
-      fftwCPU(h_A ,h_B2, dimX, dimY);
-      Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimY, dimX/2+1, 3, 2);
+   printf("fftw on CPU...\n");
+   cudaEventRecord(hostStart, 0);
+   fftwCPU(h_A ,h_B2, dimX, dimY);
+   cudaEventRecord(hostStop, 0);
+   cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
+   Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimY, dimX/2+1, 3, 2);
+   printf("Matrix fft over. Time taken on CPU: %5.5f\n", timeDifferenceOnHost);
 
-      cudaEventRecord(hostStop, 0);
-      cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
-      printf("Matrix fft over. Time taken on CPU: %5.5f\n",     
-          timeDifferenceOnHost);
+   //Create Plan
+   cudaEventRecord(deviceStart, 0);
+   cufftHandle plan;
+   cufftPlan2d(&plan, dimX, dimY, CUFFT_R2C);
+   //fprintf(stderr, "cufftPlan2d\n");
 
-      //Create Plan
-      cufftHandle plan;
-      cufftPlan2d(&plan, dimX, dimY, CUFFT_R2C);
-      fprintf(stderr, "cufftPlan2d\n");
-
-      
-      /* Copy matrices from host memory to device memory */
-//      memset(h_B, 0, size);
-      cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
-      cudaMemcpy(d_B, h_B, sizeFourier, cudaMemcpyHostToDevice);
-      fprintf(stderr, "cudaMemcpy\n");
-      cufftExecR2C(plan, d_A, d_B);
-      cudaError_t code=cudaGetLastError();
-      if (code)
+   /* Copy matrices from host memory to device memory */
+   cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
+   cudaMemcpy(d_B, h_B, sizeFourier, cudaMemcpyHostToDevice);
+   cufftExecR2C(plan, d_A, d_B);
+   cudaError_t code=cudaGetLastError();
+   if (code)
          printf("error=%s",cudaGetErrorString(code));
-      cudaDeviceSynchronize();  
-      cudaEventRecord(deviceStop, 0);
+   cudaDeviceSynchronize();  
+   cudaEventRecord(deviceStop, 0);
 
-      /* Wait for the kernel to complete */
-      cudaThreadSynchronize();
-      cudaEventElapsedTime(&timeDifferenceOnDevice, deviceStart, deviceStop);
+   /* Wait for the kernel to complete */
+   cudaThreadSynchronize();
+   cudaEventElapsedTime(&timeDifferenceOnDevice, deviceStart, deviceStop);
 
-      /* Copy result from device memory to host memory */
-      checkError(cudaMemcpy(h_B, d_B, size, cudaMemcpyDeviceToHost), "Matrix B Copy from device to Host");
+   /* Copy result from device memory to host memory */
+   checkError(cudaMemcpy(h_B, d_B, size, cudaMemcpyDeviceToHost), "Matrix B Copy from device to Host");
 /*
       if(checkIfMatricesEqual(h_B, h_B2, matrixSize))
           printf("Kernels correct!\n");
