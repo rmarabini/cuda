@@ -198,7 +198,7 @@ int main(int argc, char* argv[]) {
       printf("GPUtime: %5.5f\n", (float)timeDifferenceOnDevice);
 
       Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimY, dimX/2+1, 3, 2);
-      Print_matrix_cu_complex("The fft image(CPU) is: ", h_B2, dimY, dimX/2+1, 3, 2);
+      Print_matrix_cu_complex("The fft image(GPU) is: ", h_B, dimY, dimX/2+1, 3, 2);
 //Print_matrix_cu_complex("The fft image(GPU) is: ", h_B, dimX, dimY, 3, 3);
       
    /* Free device memory */
