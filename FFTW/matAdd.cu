@@ -145,7 +145,7 @@ int main(int argc, char* argv[]) {
       cudaEventRecord(hostStart, 0);
       //rotate matrix using CPU
       //memset(h_B2, 0, size);
-      fftwCPU(h_A ,h_B, dimX, dimY);
+      fftwCPU(h_A ,h_B2, dimX, dimY);
       Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimY, dimX/2+1, 3, 2);
 
       cudaEventRecord(hostStop, 0);
