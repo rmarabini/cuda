@@ -115,13 +115,12 @@ void Print_matrix(const char title[], float A[], int numVec, int dimVec, int m, 
 
 void Print_matrix_complex(const char title[], fftwf_complex A[], int dimY, int dimX, int m, int n) {
    int i, j;
-   float complex c;
+   //float complex c;
    printf("%s\n", title);
    for (i = 0; i < m; i++) {
       for (j = 0; j < n; j++){
-
-           c=A[i*dimX+j];
-         printf("%.2f%+.2fi ", crealf(c), cimagf(c));
+           //c=A[i*dimX+j];
+         printf("%.2f%+.2fi ", A[i*dimX+j][0], A[i*dimX+j][1]);
                }
       printf("\n");
    }  
