@@ -26,58 +26,6 @@
  * Out arg:  C
  */
 
-__global__ void fftwFunc(float matIn[], 
-                           float matOut[], 
-                           int dimX, 
-                           int dimY) {
-//    int y = blockIdx.y;
-///    int x = blockIdx.x * blockDim.x + threadIdx.x;
-    int x = blockIdx.x * blockDim.x + threadIdx.x;
-    int y = blockIdx.y * blockDim.y + threadIdx.y;
-    if ( x >= dimX || y >= dimY) 
-         return;
-
-    //// compute target address
-    int  x0=dimX/2, y0=dimY/2;
-    const unsigned int idx = x + y * dimX;
-
-    const int xA = (x - x0 );
-    const int yA = (y - y0 );
-
-    const float xR = ( xA * rotMat[0] - yA * rotMat[1]);
-    const float yR = ( -xA * rotMat[2] + yA * rotMat[3]);
-    float src_x = xR + x0;
-    float src_y = yR + y0;
-
-     if ( src_x >= 0.0f && src_x < dimX && src_y >= 0.0f && src_y < dimY) {
-        // BI - LINEAR INTERPOLATION
-        float src_x0 = (float)(int)(src_x);
-        float src_x1 = (src_x0+1); if(src_x1 == dimX) src_x1=src_x0;
-        float src_y0 = (float)(int)(src_y);
-        float src_y1 = (src_y0+1); if(src_y1 == dimY) src_y1=src_y0;
-
-        float sx = (src_x-src_x0);
-        float sy = (src_y-src_y0);
-
-
-        int idx_src00 = min(src_x0   + src_y0 * dimX,dimX*dimY-1.0f);
-        int idx_src10 = min(src_x1   + src_y0 * dimX,dimX*dimY-1.0f);
-        int idx_src01 = min(src_x0   + src_y1 * dimX,dimX*dimY-1.0f);
-        int idx_src11 = min(src_x1   + src_y1 * dimX,dimX*dimY-1.0f);
-
-        matOut[idx]  = (1.0f-sx)*(1.0f-sy)*matIn[idx_src00];
-        matOut[idx] += (     sx)*(1.0f-sy)*matIn[idx_src10];
-        matOut[idx] += (1.0f-sx)*(     sy)*matIn[idx_src01];
-        matOut[idx] += (     sx)*(     sy)*matIn[idx_src11];
-    } else {
-        matOut[idx] = 0.0f;
-     }
-
-
-
-
-}  /* Mat_add */
-
 
 /*---------------------------------------------------------------------
  * Function:  Fill_matrix
