@@ -171,12 +171,14 @@ int main(int argc, char* argv[]) {
       //Create Plan
       cufftHandle plan;
       cufftPlan2d(&plan, dimX, dimY, CUFFT_R2C);
+      fprintf(stderr, "cufftPlan2d\n");
 
+      
       /* Copy matrices from host memory to device memory */
 //      memset(h_B, 0, size);
       cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
       cudaMemcpy(d_B, h_B, sizeFourier, cudaMemcpyHostToDevice);
-      printf("ssssssssssssssssssssssssssssssssssss");
+      fprintf(stderr, "cudaMemcpy\n");
       cufftExecR2C(plan, d_A, d_B);
       cudaError_t code=cudaGetLastError();
       if (code)
