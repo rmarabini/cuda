@@ -195,7 +195,7 @@ int main(int argc, char* argv[]) {
    cudaMalloc(&d_B, size*2);
 
    Fill_matrix(h_A, dimX, dimY);
-
+   Print_matrix("original matrix is: ", A, dimX, dimY, 3, 3);
       printf("fftw on CPU...\n");
       cudaEventRecord(hostStart, 0);
       //rotate matrix using CPU
@@ -242,7 +242,7 @@ int main(int argc, char* argv[]) {
       printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
       printf("GPUtime: %5.5f\n", (float)timeDifferenceOnDevice);
 
-      Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimX, dimY, 4, 4);
+      Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimX, dimY, 3, 3);
       //Print_matrix("The fft image(GPU) is: ", h_B, dimX, dimY, 9, 9);
       
    /* Free device memory */
