@@ -97,7 +97,6 @@ bool checkIfMatricesEqual(fftwf_complex * mat1, fftwf_complex * mat2, float matS
 void fftwCPU(float matIn[], 
                fftwf_complex matOut[], int dimX, int dimY){  
     fftwf_plan p2d;
-    int n[2];
     p2d = fftwf_plan_dft_r2c_2d(dimX, dimY, matIn,matOut,FFTW_ESTIMATE );
     fftwf_execute(p2d);
 }
