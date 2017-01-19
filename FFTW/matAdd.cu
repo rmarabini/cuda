@@ -118,7 +118,7 @@ void Print_matrix_complex(const char title[], fftwf_complex A[], int dimY, int d
    //float complex c;
    printf("%s\n", title);
    for (i = 0; i < m; i++) {
-      for (j = 0; j < n+2; j++){
+      for (j = 0; j < n; j++){
            //c=A[i*dimX+j];
          printf("%.2f%+.2fi ", A[i*dimX+j][0], A[i*dimX+j][1]);
                }
@@ -159,8 +159,8 @@ void fftwCPU(float matIn[],
     fftwf_plan p2d;
     int n[2];
     n[0]=dimX; n[1]=dimY;
-    //p2d = fftwf_plan_dft_r2c_2d(dimX, dimY, matIn,matOut,FFTW_ESTIMATE );
-    p2d = fftwf_plan_dft_r2c(2, n, matIn, matOut,FFTW_ESTIMATE );
+    p2d = fftwf_plan_dft_r2c_2d(dimX, dimY, matIn,matOut,FFTW_ESTIMATE );
+    //p2d = fftwf_plan_dft_r2c(2, n, matIn, matOut,FFTW_ESTIMATE );
     fftwf_execute(p2d);
 }
 
@@ -217,7 +217,7 @@ int main(int argc, char* argv[]) {
       /* Copy matrices from host memory to device memory */
       memset(h_B, 0, size);
       cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
-      cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
+      cudaMemcpy(d_B, h_B, sizeFourier, cudaMemcpyHostToDevice);
 
 
       /* Invoke kernel using dimX * dimY thread blocks, each of    */
