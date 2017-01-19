@@ -117,7 +117,8 @@ void Print_matrix_complex(const char title[], fftwf_complex A[], int numVec, int
    printf("%s\n", title);
    for (i = 0; i < m; i++) {
       for (j = 0; j < n; j++)
-         printf("%.2f-i%.2f ", A[i*dimVec+j][0],A[i*dimVec+j][1] );
+         printf("%.2f%+.2fi ", crealf(A[i*dimVec+j]), 
+                                cimgf(A[i*dimVec+j]));
       printf("\n");
    }  
 }  /* Print_matrix */
@@ -203,7 +204,7 @@ int main(int argc, char* argv[]) {
       //rotate matrix using CPU
       //memset(h_B2, 0, size);
       fftwCPU(h_A ,h_B2, dimX, dimY);
-      Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimX, dimY, 3, 3);
+      Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimX, dimY/2, 3, 3);
       return;      
       cudaEventRecord(hostStop, 0);
       cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
