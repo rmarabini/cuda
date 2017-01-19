@@ -16,6 +16,7 @@
 //#include <helper_functions.h>    // includes cuda.h and cuda_runtime_api.h
 
 #include "fftw3.h"
+#include <complex.h>
 
 
 /*---------------------------------------------------------------------
