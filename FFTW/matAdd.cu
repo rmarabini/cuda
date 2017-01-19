@@ -84,7 +84,9 @@ void Print_matrix_cu_complex(const char title[], cufftComplex A[], int dimY, int
          printf("%.2f%+.2fi ", A[i*dimX+j].x, A[i*dimX+j].y);
                }
       printf("\n");
-   }  
+   }       
+
+   printf("\n"); 
    for (i = 0; i < 9; i++) 
          printf("%.2f%+.2fi ", A[i].x, A[i].y);
 }  /* Print_matrix */
