@@ -152,7 +152,6 @@ fftwf_execute(p2d);
 int main(int argc, char* argv[]) {
    size_t dimX = 1024;//mat size
    size_t dimY = 1024;
-   int numberRot;
 
    // variables for threads per block, number of blocks.
    int threadsPerBlockX = 32;//, blocksInGrid = 0;   
