@@ -154,7 +154,7 @@ void fftwCPU(float matIn[],
 //malloc(640*480*sizeof(fftw_complex));
 
 fftwf_plan p2d;
-p2d = fftwf_plan_dft_r2c_2d(dimX, dimY, matIn,matOut,FFTW_ESTIMATE );
+p2d = fftwf_plan_many_dft_r2c(dimX, dimY, matIn,matOut,FFTW_ESTIMATE );
 fftwf_execute(p2d);
 }
 
