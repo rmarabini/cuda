@@ -187,7 +187,7 @@ int main(int argc, char* argv[]) {
 
    matrixSize = dimX*dimY;
    size = matrixSize*sizeof(float);
-   sizeFourier = dimY*(dimX/2+1)*sizeof(float);
+   int sizeFourier = dimY*(dimX/2+1)*sizeof(float);
    h_A = (float*) calloc(size,1);
    fftwf_complex * h_B  =(fftwf_complex *) malloc(sizeFourier);
    fftwf_complex * h_B2 =(fftwf_complex *) malloc(sizeFourier);
