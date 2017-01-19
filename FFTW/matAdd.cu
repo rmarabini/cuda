@@ -85,10 +85,6 @@ void Print_matrix_cu_complex(const char title[], cufftComplex A[], int dimY, int
                }
       printf("\n");
    }       
-
-   printf(">>> %d \n", sizeof(cufftComplex)); 
-   for (i = 0; i < 9; i++) 
-         printf("%.2f%+.2fi ", A[i].x, A[i].y);
 }  /* Print_matrix */
 
 void checkError(cudaError_t error, const char function[])
@@ -191,7 +187,7 @@ int main(int argc, char* argv[]) {
    cudaEventElapsedTime(&timeDifferenceOnDevice, deviceStart, deviceStop);
 
    /* Copy result from device memory to host memory */
-   checkError(cudaMemcpy(h_B, d_B, size, cudaMemcpyDeviceToHost), "Matrix B Copy from device to Host");
+   checkError(cudaMemcpy(h_B, d_B, sizeFourier, cudaMemcpyDeviceToHost), "Matrix B Copy from device to Host");
 /*
       if(checkIfMatricesEqual(h_B, h_B2, matrixSize))
           printf("Kernels correct!\n");
