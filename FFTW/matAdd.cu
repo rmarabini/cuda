@@ -197,13 +197,15 @@ int main(int argc, char* argv[]) {
           printf("Kernels correct!\n");
       else
          printf("Kernel logic wrong!\n");
+   cufftHandle plan;
+   cufftPlan2d(&plan, dimX, dimY, CUFFT_R2C);
 
    cufftHandle planI;
-   cufftPlan2d(&planI, dimX, dimY, CUFFT_C2R);
-   /*cufftExecC2R(planI, d_B, d_A);
+   cufftPlan2d(&planI, dimX/2+1, dimY, CUFFT_C2R);
+   cufftExecC2R(planI, d_B, d_A);
    checkError(cudaMemcpy(h_A2, d_A, sizeFourier, cudaMemcpyDeviceToHost),
 "Matrix A Copy from device to Host");
-*/      printf("Finished fft on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
+      printf("Finished fft on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
       printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
       printf("GPUtime: %5.5f\n", (float)timeDifferenceOnDevice);
 
