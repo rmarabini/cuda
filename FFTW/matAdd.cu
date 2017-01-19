@@ -145,17 +145,19 @@ bool checkIfMatricesEqual(fftwf_complex * mat1, fftwf_complex * mat2, float matS
     return true;
 }
 void fftwCPU(float matIn[], 
-               fftwf_complex matOut[], int dimX, int dimY)
-{
+               fftwf_complex matOut[], int dimX, int dimY){
 //double * image=(double *) malloc(640*480*sizeof(double));
 //fftw_complex * out2d=(fftw_complex *)
 //malloc(640*480*sizeof(fftw_complex));
 //fftw_complex * out2c=(fftw_complex *)
 //malloc(640*480*sizeof(fftw_complex));
-
-fftwf_plan p2d;
-p2d = fftwf_plan_dft_r2c_2d(dimX, dimY, matIn,matOut,FFTW_ESTIMATE );
-fftwf_execute(p2d);
+  
+    fftwf_plan p2d;
+    int n[2];
+    n[0]=dimX; n[1]=dimY;
+    //p2d = fftwf_plan_dft_r2c_2d(dimX, dimY, matIn,matOut,FFTW_ESTIMATE );
+    p2d = fftwf_plan_dft_r2c(2, n, matIn,matOut,FFTW_ESTIMATE );
+    fftwf_execute(p2d);
 }
 
 /* Host code */
