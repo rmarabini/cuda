@@ -12,8 +12,8 @@
 //#include "cuPrintf.cuh"
 //#include "cuPrintf.cu"
  //#include "utils/cuPrintf.cu"
-#include <helper_cuda.h>         // helper functions for CUDA error check
-#include <helper_functions.h>    // includes cuda.h and cuda_runtime_api.h
+//#include <helper_cuda.h>         // helper functions for CUDA error check
+//#include <helper_functions.h>    // includes cuda.h and cuda_runtime_api.h
 
 
 /*---------------------------------------------------------------------
