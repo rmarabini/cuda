@@ -191,7 +191,7 @@ int main(int argc, char* argv[]) {
 
    matrixSize = dimX*dimY;
    size = matrixSize*sizeof(float);
-   int sizeFourier = dimY*(dimX/*/2+1*/)*sizeof(float);
+   int sizeFourier = dimY*(dimX/2+1)*sizeof(float);
    h_A = (float*) calloc(size,1);
    fftwf_complex * h_B  =(fftwf_complex *) malloc(sizeFourier);
    fftwf_complex * h_B2 =(fftwf_complex *) malloc(sizeFourier);
@@ -207,7 +207,7 @@ int main(int argc, char* argv[]) {
       //rotate matrix using CPU
       //memset(h_B2, 0, size);
       fftwCPU(h_A ,h_B2, dimX, dimY);
-      Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimY, 2, 3, 2);
+      Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimY, dimX/2+1, 3, 2);
       return;      
       cudaEventRecord(hostStop, 0);
       cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
