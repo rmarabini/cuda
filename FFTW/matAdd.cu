@@ -200,7 +200,7 @@ int main(int argc, char* argv[]) {
 
    cufftHandle planI;
    cufftPlan2d(&planI, dimX, dimY, CUFFT_C2R);
-   cufftExecC2R(plan, d_B, d_A);
+   cufftExecC2R(planI, d_B, d_A);
    checkError(cudaMemcpy(d_A, h_A2, sizeFourier, cudaMemcpyDeviceToHost),
 "Matrix A Copy from device to Host");
       printf("Finished fft on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
