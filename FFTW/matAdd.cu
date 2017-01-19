@@ -159,7 +159,7 @@ void fftwCPU(float matIn[],
     fftwf_plan p2d;
     int n[2];
     n[0]=dimX; n[1]=dimY;
-    p2d = fftwf_plan_dft_r2c_2d(dimY, dimX, matIn,matOut,FFTW_ESTIMATE );
+    p2d = fftwf_plan_dft_r2c_2d(dimX, dimY, matIn,matOut,FFTW_ESTIMATE );
     //p2d = fftwf_plan_dft_r2c(2, n, matIn, matOut,FFTW_ESTIMATE );
     fftwf_execute(p2d);
 }
@@ -207,7 +207,7 @@ int main(int argc, char* argv[]) {
       //rotate matrix using CPU
       //memset(h_B2, 0, size);
       fftwCPU(h_A ,h_B2, dimX, dimY);
-      Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimY, dimX, 4, 3);
+      Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimY, dimX, 3, 3);
       return;      
       cudaEventRecord(hostStop, 0);
       cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
