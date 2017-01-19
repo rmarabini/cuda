@@ -14,6 +14,8 @@
  //#include "utils/cuPrintf.cu"
 //#include <helper_cuda.h>         // helper functions for CUDA error check
 //#include <helper_functions.h>    // includes cuda.h and cuda_runtime_api.h
+//ecurso01@finlay:~/ROB/cuda/FFTW> export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-7.5/lib64
+//curso01@finlay:~/ROB/cuda/FFTW> git pull ; /usr/local/cuda-7.5/bin/nvcc matAdd.cu -I /usr/local/scipion/software/include -L /usr/local/scipion/software/lib -lfftw3f -run -D__INTEL_COMPILER -lm -L /usr/local/cuda-7.5/lib64/ -lcuda -lcufft
 
 #include "fftw3.h"
 #include <complex.h>
@@ -174,7 +176,7 @@ int main(int argc, char* argv[]) {
 //      memset(h_B, 0, size);
       cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
       cudaMemcpy(d_B, h_B, sizeFourier, cudaMemcpyHostToDevice);
-
+      printf("ssssssssssssssssssssssssssssssssssss");
       cufftExecR2C(plan, d_A, d_B);
       cudaError_t code=cudaGetLastError();
       if (code)
