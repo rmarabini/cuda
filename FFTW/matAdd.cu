@@ -97,11 +97,13 @@ void checkError(cudaError_t error, const char function[])
         }
 }
 
-bool checkIfMatricesEqual(fftwf_complex * mat1, fftwf_complex * mat2, float matSize)
+bool checkIfMatricesEqual(cufftComplex * mat1, fftwf_complex * mat2, float matSize)
 {
     int i = 0;
     for( ; i < matSize; i++)
-       if(mat1[i] != mat2[i]){
+       if( (fabs(mat1[i].x - mat2[i][0]) + 
+            fabs(mat1[i].y - mat2[i][1]) ) < 0.01 
+         ){
            printf("values different for i: %d\n", i);
 		   printf("mat1[i] = %d, mat2[i] = %d\n", mat1[i], mat2[i]);		   
 		   return false;
@@ -138,7 +140,7 @@ int main(int argc, char* argv[]) {
    /* Get size of matrices */
 
    matrixSize = dimX*dimY;
-   size = matrixSize*sizeof(float);
+   size = sizeFourier*sizeof(float);
    int sizeFourier = dimY*(dimX/2+1)*sizeof(fftwf_complex);
    //typedef float cufftReal; is a single-precision, floating-point real data type. 
    h_A = (float*) calloc(size,1);
@@ -188,12 +190,12 @@ int main(int argc, char* argv[]) {
 
    /* Copy result from device memory to host memory */
    checkError(cudaMemcpy(h_B, d_B, sizeFourier, cudaMemcpyDeviceToHost), "Matrix B Copy from device to Host");
-/*
-      if(checkIfMatricesEqual(h_B, h_B2, matrixSize))
+
+      if(checkIfMatricesEqual(h_B, h_B2, sizeFourier))
           printf("Kernels correct!\n");
       else
          printf("Kernel logic wrong!\n");
-*/	
+
       printf("Finished fft on GPU. Time taken: %5.5f\n", timeDifferenceOnDevice);   
       printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
       printf("GPUtime: %5.5f\n", (float)timeDifferenceOnDevice);
