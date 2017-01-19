@@ -117,10 +117,11 @@ void Print_matrix_complex(const char title[], fftwf_complex A[], int dimY, int d
    int i, j;
    printf("%s\n", title);
    for (i = 0; i < m; i++) {
-      for (j = 0; j < n; j++)
-         printf("%.2f%+.2fi ", crealf(A[i*dimX+j]), 
-                               cimagf(A[i*dimX+j])
-               );
+      for (j = 0; j < n; j++){
+           std::complex<float> c;
+           c=A[i*dimX+j];
+         printf("%.2f%+.2fi ", crealf(c), cimagf(c));
+               }
       printf("\n");
    }  
 }  /* Print_matrix */
