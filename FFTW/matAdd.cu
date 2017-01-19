@@ -119,7 +119,8 @@ void Print_matrix_complex(const char title[], fftwf_complex A[], int numVec, int
    for (i = 0; i < m; i++) {
       for (j = 0; j < n; j++)
          printf("%.2f%+.2fi ", crealf(A[i*dimVec+j]), 
-                                cimgf(A[i*dimVec+j]));
+                               cimagf(A[i*dimVec+j])
+               );
       printf("\n");
    }  
 }  /* Print_matrix */
