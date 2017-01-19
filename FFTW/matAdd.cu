@@ -135,7 +135,7 @@ bool checkIfMatricesEqual(float * mat1, float * mat2, float matSize)
     return true;
 }
 void fftwCPU(float matIn[], 
-               float matOut[], int dimX, int dimY)
+               fftw_complex matOut[], int dimX, int dimY)
 {
 //double * image=(double *) malloc(640*480*sizeof(double));
 //fftw_complex * out2d=(fftw_complex *)
