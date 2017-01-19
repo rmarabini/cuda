@@ -148,13 +148,7 @@ bool checkIfMatricesEqual(fftwf_complex * mat1, fftwf_complex * mat2, float matS
     return true;
 }
 void fftwCPU(float matIn[], 
-               fftwf_complex matOut[], int dimX, int dimY){
-//double * image=(double *) malloc(640*480*sizeof(double));
-//fftw_complex * out2d=(fftw_complex *)
-//malloc(640*480*sizeof(fftw_complex));
-//fftw_complex * out2c=(fftw_complex *)
-//malloc(640*480*sizeof(fftw_complex));
-  
+               fftwf_complex matOut[], int dimX, int dimY){  
     fftwf_plan p2d;
     int n[2];
     p2d = fftwf_plan_dft_r2c_2d(dimX, dimY, matIn,matOut,FFTW_ESTIMATE );
@@ -188,7 +182,7 @@ int main(int argc, char* argv[]) {
 
    matrixSize = dimX*dimY;
    size = matrixSize*sizeof(float);
-   int sizeFourier = dimY*(dimX/2+1)*sizeof(float);
+   int sizeFourier = dimY*(dimX/2+1)*sizeof(fftwf_complex);
    h_A = (float*) calloc(size,1);
    fftwf_complex * h_B  =(fftwf_complex *) malloc(sizeFourier);
    fftwf_complex * h_B2 =(fftwf_complex *) malloc(sizeFourier);
@@ -205,14 +199,14 @@ int main(int argc, char* argv[]) {
       //memset(h_B2, 0, size);
       fftwCPU(h_A ,h_B2, dimX, dimY);
       Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimY, dimX/2+1, 3, 2);
-      return;      
+return;
       cudaEventRecord(hostStop, 0);
       cudaEventElapsedTime(&timeDifferenceOnHost, hostStart, hostStop);
       printf("Matrix fft over. Time taken on CPU: %5.5f\n",     
           timeDifferenceOnHost);
 
       /* Copy matrices from host memory to device memory */
-      memset(h_B, 0, size);
+//      memset(h_B, 0, size);
       cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
       cudaMemcpy(d_B, h_B, sizeFourier, cudaMemcpyHostToDevice);
 
