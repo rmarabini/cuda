@@ -115,7 +115,6 @@ void Print_matrix(const char title[], float A[], int numVec, int dimVec, int m, 
 
 void Print_matrix_complex(const char title[], fftwf_complex A[], int dimY, int dimX, int m, int n) {
    int i, j;
-   //float complex c;
    printf("%s\n", title);
    for (i = 0; i < m; i++) {
       for (j = 0; j < n; j++){
@@ -158,9 +157,7 @@ void fftwCPU(float matIn[],
   
     fftwf_plan p2d;
     int n[2];
-    n[0]=dimX; n[1]=dimY;
     p2d = fftwf_plan_dft_r2c_2d(dimX, dimY, matIn,matOut,FFTW_ESTIMATE );
-    //p2d = fftwf_plan_dft_r2c(2, n, matIn, matOut,FFTW_ESTIMATE );
     fftwf_execute(p2d);
 }
 
