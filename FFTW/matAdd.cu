@@ -138,10 +138,11 @@ int main(int argc, char* argv[]) {
    size_t size, matrixSize;
 
    /* Get size of matrices */
-
+  
    matrixSize = dimX*dimY;
-   size = sizeFourier*sizeof(float);
-   int sizeFourier = dimY*(dimX/2+1)*sizeof(fftwf_complex);
+   size = matrixSize*sizeof(float);
+   matrixFourierSize = dimY*(dimX/2+1);
+   int sizeFourier = matrixFourierSize*sizeof(fftwf_complex);
    //typedef float cufftReal; is a single-precision, floating-point real data type. 
    h_A = (float*) calloc(size,1);
    cufftComplex  * h_B  =(cufftComplex *) malloc(sizeFourier);
@@ -191,7 +192,7 @@ int main(int argc, char* argv[]) {
    /* Copy result from device memory to host memory */
    checkError(cudaMemcpy(h_B, d_B, sizeFourier, cudaMemcpyDeviceToHost), "Matrix B Copy from device to Host");
 
-      if(checkIfMatricesEqual(h_B, h_B2, sizeFourier))
+      if(checkIfMatricesEqual(h_B, h_B2, matrixFourierSize))
           printf("Kernels correct!\n");
       else
          printf("Kernel logic wrong!\n");
