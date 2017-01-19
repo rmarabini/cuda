@@ -112,6 +112,16 @@ void Print_matrix(const char title[], float A[], int numVec, int dimVec, int m, 
    }  
 }  /* Print_matrix */
 
+void Print_matrix_complex(const char title[], fftwf_complex A[], int numVec, int dimVec, int m, int n) {
+   int i, j;
+   printf("%s\n", title);
+   for (i = 0; i < m; i++) {
+      for (j = 0; j < n; j++)
+         printf("%.2f-i%.2f ", A[i*dimVec+j][0],A[i*dimVec+j][1] );
+      printf("\n");
+   }  
+}  /* Print_matrix */
+
 void checkError(cudaError_t error, const char function[])
 {
 
@@ -150,8 +160,8 @@ fftwf_execute(p2d);
 
 /* Host code */
 int main(int argc, char* argv[]) {
-   size_t dimX = 1024;//mat size
-   size_t dimY = 1024;
+   size_t dimX = 3;//mat size
+   size_t dimY = 3;
 
    // variables for threads per block, number of blocks.
    int threadsPerBlockX = 32;//, blocksInGrid = 0;   
@@ -232,7 +242,7 @@ int main(int argc, char* argv[]) {
       printf("Speedup: %5.5f\n", (float)timeDifferenceOnHost/timeDifferenceOnDevice);
       printf("GPUtime: %5.5f\n", (float)timeDifferenceOnDevice);
 
-      //Print_matrix("The fft image(CPU) is: ", h_B2, dimX, dimY, 9, 9);
+      Print_matrix_complex("The fft image(CPU) is: ", h_B2, dimX, dimY, 4, 4);
       //Print_matrix("The fft image(GPU) is: ", h_B, dimX, dimY, 9, 9);
       
    /* Free device memory */
